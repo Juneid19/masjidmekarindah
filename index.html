@@ -1,0 +1,1850 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masjid Mekarindah - Cikarang</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1B5E20;
+            --primary-light: #4CAF50;
+            --primary-dark: #0D3B0F;
+            --secondary: #FFD54F;
+            --accent: #81C784;
+            --white: #FFFFFF;
+            --light: #F1F8E9;
+            --gray: #757575;
+            --dark: #212121;
+            --danger: #e74c3c;
+            --gold: #D4AF37;
+        }
+
+        html {
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--light);
+    color: var(--dark);
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+
+        /* ========== HEADER ========== */
+        header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: var(--white);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon i {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+        }
+
+        .logo-text h1 {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .logo-text span {
+            font-size: 0.7rem;
+            opacity: 0.9;
+            color: var(--accent);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 3px;
+            flex-wrap: wrap;
+        }
+
+        .nav-menu a {
+            color: var(--white);
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 20px;
+            transition: all 0.3s;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            background: var(--secondary);
+            color: var(--primary-dark);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+            padding: 10px;
+        }
+
+        .hamburger span {
+            width: 28px;
+            height: 3px;
+            background: var(--white);
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+
+        @media (max-width: 1024px) {
+            .hamburger { display: flex; }
+            .nav-menu {
+                position: fixed;
+                top: 74px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 74px);
+                background: var(--primary-dark);
+                flex-direction: column;
+                align-items: center;
+                padding: 30px 20px;
+                gap: 5px;
+                transition: left 0.3s;
+                overflow-y: auto;
+            }
+            .nav-menu.active { left: 0; }
+            .nav-menu a { padding: 12px 30px; font-size: 1rem; }
+        }
+
+        /* ========== HERO ========== */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L35 15H45L37 24L40 39L30 31L20 39L23 24L15 15H25L30 0Z' fill='%23ffffff' fill-opacity='0.03'/%3E%3C/svg%3E");
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-masjid-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: 5px solid var(--secondary);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .hero-ayat {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 25px 30px;
+            margin: 25px auto;
+            max-width: 800px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .hero-ayat p {
+            font-family: 'Amiri', serif;
+            font-size: 1.3rem;
+            line-height: 2;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+
+        .hero-ayat cite {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        /* ========== JADWAL SHOLAT FLOATING ========== */
+        .jadwal-float {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 1000px;
+            margin: -60px auto 40px;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+
+        .jadwal-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .jadwal-header h3 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .jadwal-header .tanggal {
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+
+        .jadwal-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .jadwal-item {
+            text-align: center;
+            padding: 15px 10px;
+            background: var(--light);
+            border-radius: 12px;
+            transition: all 0.3s;
+            cursor: default;
+        }
+
+        .jadwal-item:hover,
+        .jadwal-item.active {
+            background: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .jadwal-item:hover .jadwal-nama,
+        .jadwal-item:hover .jadwal-waktu,
+        .jadwal-item.active .jadwal-nama,
+        .jadwal-item.active .jadwal-waktu {
+            color: var(--white);
+        }
+
+        .jadwal-nama {
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+
+        .jadwal-waktu {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        @media (max-width: 600px) {
+            .jadwal-grid { grid-template-columns: repeat(3, 1fr); }
+            .jadwal-float { margin: -40px 15px 30px; padding: 20px 15px; }
+            .hero { padding: 60px 20px; }
+            .hero h2 { font-size: 1.8rem; }
+            .hero-ayat p { font-size: 1.1rem; }
+        }
+
+        /* ========== SECTIONS ========== */
+        .section {
+            padding: 70px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .section-header h2 {
+          color: var(--primary);
+          font-size: 1.4rem;
+          margin-bottom: 10px;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          white-space: nowrap;
+}
+
+@media (max-width: 500px) {
+    .section-header h2 {
+        font-size: 1.2rem;
+        gap: 6px;
+    }
+}
+
+        .section-header h2::before,
+        .section-header h2::after {
+    content: '';
+    width: 30px;
+    height: 3px;
+    background: var(--secondary);
+    border-radius: 3px;
+}
+
+@media (max-width: 500px) {
+    .section-header h2::before,
+    .section-header h2::after {
+        width: 20px;
+    }
+}
+
+        .section-header p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 10px auto 0;
+        }
+
+        .section-alt {
+            background: var(--white);
+        }
+
+        .section-green {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+        }
+
+        .section-green .section-header h2 {
+            color: var(--white);
+        }
+
+        .section-green .section-header p {
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* ========== TENTANG MASJID ========== */
+        .tentang-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .tentang-container { grid-template-columns: 1fr; }
+        }
+
+        .tentang-content {
+            background: var(--white);
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+        }
+
+        .tentang-content h3 {
+            color: var(--primary);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tentang-content p {
+            color: var(--gray);
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .visi-misi-card {
+            background: var(--light);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .visi-misi-card h4 {
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .visi-misi-card p,
+        .visi-misi-card ul {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .visi-misi-card ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .visi-misi-card li {
+            margin-bottom: 8px;
+        }
+
+        /* ========== STRUKTUR PENGURUS ========== */
+        .pengurus-section {
+            margin-bottom: 40px;
+        }
+
+        .pengurus-section h3 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary);
+            display: inline-block;
+        }
+
+        .pengurus-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .pengurus-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 25px 20px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            border-top: 4px solid var(--primary);
+        }
+
+        .pengurus-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        }
+
+        .pengurus-card.ketua {
+            border-top-color: var(--gold);
+            background: linear-gradient(to bottom, #fffdf5, var(--white));
+        }
+
+        .pengurus-photo {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 4px solid var(--light);
+        }
+
+        .pengurus-card h4 {
+            color: var(--dark);
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .pengurus-jabatan {
+            color: var(--primary);
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            background: var(--light);
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .pengurus-card.ketua .pengurus-jabatan {
+            background: var(--gold);
+            color: var(--white);
+        }
+
+        .pengurus-kontak {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        /* ========== JADWAL KAJIAN ========== */
+        .kajian-weekly {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .kajian-day-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .kajian-day-header {
+            background: rgba(255,255,255,0.15);
+            padding: 15px 20px;
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .kajian-day-body {
+            padding: 20px;
+        }
+
+        .kajian-day-body h4 {
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .kajian-ustadz {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .kajian-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .kajian-link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .kajian-link-btn.video {
+            background: #ff0000;
+            color: white;
+        }
+
+        .kajian-link-btn.audio {
+            background: var(--secondary);
+            color: var(--primary-dark);
+        }
+
+        .kajian-link-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .kajian-waktu {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        /* ========== LAPORAN KEUANGAN ========== */
+        .keuangan-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .keuangan-container { grid-template-columns: 1fr; }
+        }
+
+        .keuangan-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .keuangan-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+        }
+
+        .keuangan-card.pemasukan::before { background: var(--primary-light); }
+        .keuangan-card.pengeluaran::before { background: var(--danger); }
+        .keuangan-card.saldo::before { background: var(--gold); }
+
+        .keuangan-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.8rem;
+        }
+
+        .keuangan-card.pemasukan .keuangan-icon {
+            background: #e8f5e9;
+            color: var(--primary);
+        }
+
+        .keuangan-card.pengeluaran .keuangan-icon {
+            background: #ffebee;
+            color: var(--danger);
+        }
+
+        .keuangan-card.saldo .keuangan-icon {
+            background: #fff8e1;
+            color: var(--gold);
+        }
+
+        .keuangan-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 8px;
+        }
+
+        .keuangan-amount {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .keuangan-period {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 10px;
+        }
+
+        .keuangan-table {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .keuangan-table-header {
+            background: var(--primary);
+            color: var(--white);
+            padding: 15px 20px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .keuangan-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .keuangan-table th,
+        .keuangan-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+
+        .keuangan-table th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .amount-in { color: var(--primary); font-weight: 600; }
+        .amount-out { color: var(--danger); font-weight: 600; }
+
+        /* ========== KISAH INSPIRATIF ========== */
+        .kisah-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .kisah-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .kisah-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        }
+
+        .kisah-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .kisah-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .kisah-card:hover .kisah-image img {
+            transform: scale(1.1);
+        }
+
+        .kisah-content {
+            padding: 25px;
+        }
+
+        .kisah-content h3 {
+            color: var(--primary-dark);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .kisah-content p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .kisah-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .read-more {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: gap 0.3s;
+        }
+
+        .read-more:hover {
+            gap: 10px;
+        }
+
+        /* ========== DONASI ========== */
+        .donasi-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        @media (max-width: 800px) {
+            .donasi-container { grid-template-columns: 1fr; }
+        }
+
+        .donasi-info h3 {
+            color: var(--white);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .donasi-info p {
+            opacity: 0.9;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .donasi-ayat {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid var(--secondary);
+            font-style: italic;
+            margin-top: 20px;
+        }
+
+        .donasi-cards {
+            display: grid;
+            gap: 15px;
+        }
+
+        .donasi-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .donasi-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .donasi-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .donasi-detail h4 {
+            color: var(--dark);
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+
+        .donasi-detail .rekening {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+
+        .donasi-detail .atas-nama {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .copy-btn {
+            background: var(--light);
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* ========== GALERI ========== */
+        .galeri-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .galeri-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .galeri-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .galeri-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .galeri-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+
+        .galeri-item:hover .galeri-overlay {
+            transform: translateY(0);
+        }
+
+        .galeri-overlay h4 {
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+
+        .galeri-overlay span {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* ========== PENGUMUMAN ========== */
+        .pengumuman-list {
+            display: grid;
+            gap: 20px;
+        }
+
+        .pengumuman-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border-left: 5px solid var(--primary);
+            transition: all 0.3s;
+        }
+
+        .pengumuman-card:hover {
+            transform: translateX(10px);
+        }
+
+        .pengumuman-card.penting {
+            border-left-color: var(--danger);
+            background: linear-gradient(to right, #fff5f5, var(--white));
+        }
+
+        .pengumuman-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .pengumuman-badge.penting {
+            background: var(--danger);
+            color: white;
+        }
+
+        .pengumuman-badge.info {
+            background: var(--primary-light);
+            color: white;
+        }
+
+        .pengumuman-card h3 {
+            color: var(--dark);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .pengumuman-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+        }
+
+        .pengumuman-meta {
+            font-size: 0.8rem;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            background: linear-gradient(135deg, var(--primary-dark), #0a2e0c);
+            color: var(--white);
+            padding: 60px 20px 30px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-section h4 {
+            color: var(--secondary);
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-section h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+
+        .footer-section p,
+        .footer-section li {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .footer-section li i {
+            color: var(--secondary);
+            margin-top: 4px;
+            width: 16px;
+        }
+
+        .footer-section a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--secondary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: var(--white);
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--secondary);
+            color: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* ========== ADMIN BUTTON ========== */
+        .admin-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 55px;
+            height: 55px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.3rem;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .admin-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        /* ========== LIGHTBOX ========== */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .lightbox-close:hover {
+            color: var(--secondary);
+        }
+
+        /* ========== EMPTY STATE ========== */
+        .empty-state {
+            text-align: center;
+            padding: 50px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <nav class="nav-container">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-mosque"></i></div>
+                <div class="logo-text">
+                    <h1>Masjid Mekarindah</h1>
+                    <span>Cikarang, Bekasi</span>
+                </div>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span><span></span><span></span>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#beranda" class="active">Beranda</a></li>
+                <li><a href="#tentang">Tentang</a></li>
+                <li><a href="#pengurus">Pengurus</a></li>
+                <li><a href="#jadwal-kajian">Kajian</a></li>
+                <li><a href="#keuangan">Keuangan</a></li>
+                <li><a href="#kisah">Kisah</a></li>
+                <li><a href="#donasi">Donasi</a></li>
+                <li><a href="#galeri">Galeri</a></li>
+                <li><a href="#pengumuman">Info</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <!-- HERO -->
+<section class="hero" id="beranda">
+    <div class="hero-content">
+        <img src="https://zeno.fm/_ipx/_/https://editor.zenomedia.com/resources/zs_station/428200/CardWebsite/7af00e46-c836-4f20-bce1-76a9e57f6be3.webp" alt="Masjid Mekarindah" class="hero-masjid-img">
+        <h2>Masjid Mekarindah</h2>
+            <div class="hero-ayat">
+                <p>"Sesungguhnya masjid-masjid itu adalah milik Allah, maka janganlah kamu menyembah selain Allah sesuatu pun di dalamnya."</p>
+                <cite>— QS. Al-Jin: 18</cite>
+            </div>
+        </div>
+    </section>
+
+    <!-- JADWAL SHOLAT -->
+    <div class="jadwal-float">
+        <div class="jadwal-header">
+            <h3><i class="fas fa-clock"></i> Jadwal Sholat Hari Ini</h3>
+            <p class="tanggal" id="tanggalHari"></p>
+        </div>
+        <div class="jadwal-grid" id="jadwalSholat"></div>
+    </div>
+
+    <!-- TENTANG MASJID -->
+    <section class="section" id="tentang">
+        <div class="section-header">
+            <h2><i class="fas fa-mosque"></i> Tentang Masjid</h2>
+            <p>Mengenal lebih dekat Masjid Mekarindah</p>
+        </div>
+        <div class="tentang-container">
+            <div class="tentang-content">
+                <h3><i class="fas fa-info-circle"></i> Profil Masjid</h3>
+                <p id="tentangDeskripsi"></p>
+                
+                <div class="visi-misi-card">
+                    <h4><i class="fas fa-eye"></i> Visi</h4>
+                    <p id="tentangVisi"></p>
+                </div>
+            </div>
+            <div class="tentang-content">
+                <div class="visi-misi-card">
+                    <h4><i class="fas fa-bullseye"></i> Misi</h4>
+                    <div id="tentangMisi"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STRUKTUR PENGURUS -->
+    <section class="section section-alt" id="pengurus">
+        <div class="section-header">
+            <h2><i class="fas fa-users"></i> Struktur Pengurus</h2>
+            <p>Dewan Kemakmuran Masjid Mekarindah</p>
+        </div>
+        <div id="pengurusContainer"></div>
+    </section>
+
+    <!-- JADWAL KAJIAN -->
+    <section class="section section-green" id="jadwal-kajian">
+        <div class="section-header">
+            <h2><i class="fas fa-book-open"></i> Jadwal Kajian</h2>
+            <p>Kajian rutin Senin - Ahad</p>
+        </div>
+        <div class="kajian-weekly" id="kajianWeekly"></div>
+    </section>
+
+    <!-- LAPORAN KEUANGAN -->
+    <section class="section" id="keuangan">
+        <div class="section-header">
+            <h2><i class="fas fa-chart-pie"></i> Laporan Keuangan</h2>
+            <p>Transparansi pengelolaan dana masjid</p>
+        </div>
+        <div class="keuangan-container" id="keuanganSummary"></div>
+        <div class="keuangan-table" id="keuanganTable"></div>
+    </section>
+
+    <!-- KISAH INSPIRATIF -->
+    <section class="section section-alt" id="kisah">
+        <div class="section-header">
+            <h2><i class="fas fa-book-reader"></i> Kisah Inspiratif</h2>
+            <p>Cerita yang menginspirasi dan memotivasi</p>
+        </div>
+        <div class="kisah-grid" id="kisahGrid"></div>
+    </section>
+
+    <!-- DONASI -->
+    <section class="section section-green" id="donasi">
+        <div class="section-header">
+            <h2><i class="fas fa-hand-holding-heart"></i> Donasi & Infaq</h2>
+            <p>Mari bersama memakmurkan rumah Allah</p>
+        </div>
+        <div class="donasi-container">
+            <div class="donasi-info">
+                <h3>Salurkan Donasi Terbaik Anda</h3>
+                <p>Setiap rupiah yang Anda donasikan akan menjadi amal jariyah yang terus mengalir pahalanya. Dana donasi digunakan untuk operasional masjid, kegiatan dakwah, dan pemberdayaan umat.</p>
+                <div class="donasi-ayat">
+                    "Perumpamaan orang yang menginfakkan hartanya di jalan Allah seperti sebutir biji yang menumbuhkan tujuh tangkai, pada setiap tangkai ada seratus biji." (QS. Al-Baqarah: 261)
+                </div>
+            </div>
+            <div class="donasi-cards" id="donasiCards"></div>
+        </div>
+    </section>
+
+    <!-- GALERI -->
+    <section class="section" id="galeri">
+        <div class="section-header">
+            <h2><i class="fas fa-images"></i> Galeri Kegiatan</h2>
+            <p>Dokumentasi kegiatan masjid</p>
+        </div>
+        <div class="galeri-grid" id="galeriGrid"></div>
+    </section>
+
+    <!-- PENGUMUMAN -->
+    <section class="section section-alt" id="pengumuman">
+        <div class="section-header">
+            <h2><i class="fas fa-bullhorn"></i> Pengumuman</h2>
+            <p>Informasi terbaru seputar kegiatan masjid</p>
+        </div>
+        <div class="pengumuman-list" id="pengumumanList"></div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Masjid Mekarindah</h4>
+                <p id="footerDeskripsi"></p>
+                <div class="social-links" id="socialLinks"></div>
+            </div>
+            <div class="footer-section">
+                <h4>Kontak Kami</h4>
+                <ul id="footerKontak"></ul>
+            </div>
+            <div class="footer-section">
+                <h4>Jam Kegiatan</h4>
+                <ul>
+                    <li><i class="fas fa-clock"></i> Kajian Ba'da Maghrib</li>
+                    <li><i class="fas fa-clock"></i> TPA: Senin-Jumat 15:30</li>
+                    <li><i class="fas fa-clock"></i> Sholat Jumat: 12:00</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Masjid Mekarindah - Cikarang. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Admin Button -->
+    <button class="admin-btn" onclick="location.href='admin.html'" title="Admin Panel">
+        <i class="fas fa-cog"></i>
+    </button>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <img src="" alt="" id="lightboxImg">
+    </div>
+
+  <script>
+    // ========== DEFAULT DATA ==========
+    const STORAGE_KEY = 'masjidMekarindah';
+    
+    const defaultData = {
+        pengaturan: {
+            nama: "Masjid Mekarindah",
+            alamat: "Jalan Puspita II Blok L no.20, Mekarindah, Cikarang",
+            telepon: "0812-3456-7890",
+            email: "masjidmekarindah@gmail.com",
+            deskripsi: "Masjid Mekarindah didirikan dengan tujuan mulia untuk menjadi pusat ibadah, pendidikan Islam, dan kegiatan sosial bagi masyarakat. Kami berkomitmen untuk terus mengembangkan program-program yang bermanfaat bagi umat.",
+            visi: "Menjadikan Masjid Mekarindah sebagai pusat ibadah, pendidikan, dan pemberdayaan umat yang unggul, mandiri, dan berdaya saing.",
+            misi: "Menyelenggarakan ibadah 5 waktu secara berjamaah;Mengadakan kajian rutin harian dan mingguan;Menyelenggarakan pendidikan Al-Quran untuk anak-anak dan dewasa;Melaksanakan kegiatan sosial dan pemberdayaan masyarakat;Mengelola keuangan masjid secara transparan dan akuntabel",
+            facebook: "",
+            instagram: "",
+            youtube: "",
+            whatsapp: ""
+        },
+        jadwalSholat: {
+            subuh: "04:35",
+            dzuhur: "12:05",
+            ashar: "15:20",
+            maghrib: "18:10",
+            isya: "19:25"
+        },
+        donasi: [
+            { id: 1, bank: "Bank Syariah Indonesia (BSI)", norek: "2022 112 212", atasNama: "Yayasan Islam Mekarindah" }
+        ],
+        pengurus: [
+            { id: 1, nama: "H. Ahmad Sudrajat", jabatan: "Ketua Yayasan", kategori: "yayasan", foto: "https://randomuser.me/api/portraits/men/1.jpg", telepon: "0812-1111-1111" },
+            { id: 2, nama: "H. Budi Santoso", jabatan: "Ketua DKM", kategori: "dkm", foto: "https://randomuser.me/api/portraits/men/2.jpg", telepon: "0812-2222-2222" },
+            { id: 3, nama: "Drs. Hendra W.", jabatan: "Sekretaris", kategori: "dkm", foto: "https://randomuser.me/api/portraits/men/3.jpg", telepon: "0812-3333-3333" },
+            { id: 4, nama: "H. Muhammad R.", jabatan: "Bendahara", kategori: "dkm", foto: "https://randomuser.me/api/portraits/men/4.jpg", telepon: "0812-4444-4444" },
+            { id: 5, nama: "Ibu Fatimah", jabatan: "Ketua Majlis Ta'lim", kategori: "majlis", foto: "https://randomuser.me/api/portraits/women/1.jpg", telepon: "0812-5555-5555" }
+        ],
+        jadwalKajian: [
+            { id: 1, hari: "Senin", tema: "Fiqih Ibadah", ustadz: "Ustadz Ahmad Zainuddin", waktu: "Ba'da Maghrib", videoLink: "", audioLink: "" },
+            { id: 2, hari: "Selasa", tema: "Tafsir Al-Quran", ustadz: "Ustadz Ibrahim", waktu: "Ba'da Maghrib", videoLink: "", audioLink: "" },
+            { id: 3, hari: "Rabu", tema: "Hadits Arbain", ustadz: "Ustadz Mahmud", waktu: "Ba'da Maghrib", videoLink: "", audioLink: "" },
+            { id: 4, hari: "Kamis", tema: "Sirah Nabawiyah", ustadz: "Ustadz Yusuf", waktu: "Ba'da Maghrib", videoLink: "", audioLink: "" },
+            { id: 5, hari: "Jumat", tema: "Libur", ustadz: "-", waktu: "-", videoLink: "", audioLink: "" },
+            { id: 6, hari: "Sabtu", tema: "Akhlak & Adab", ustadz: "Ustadz Salim", waktu: "Ba'da Maghrib", videoLink: "", audioLink: "" },
+            { id: 7, hari: "Ahad", tema: "Kajian Ahad Pagi", ustadz: "Ustadz Ahmad", waktu: "06:00 - 07:00", videoLink: "", audioLink: "" }
+        ],
+        keuangan: [
+            { id: 1, tanggal: "2025-01-20", keterangan: "Infaq Jumat", jenis: "masuk", jumlah: 2500000 },
+            { id: 2, tanggal: "2025-01-19", keterangan: "Donasi Jamaah", jenis: "masuk", jumlah: 1000000 },
+            { id: 3, tanggal: "2025-01-18", keterangan: "Listrik & Air", jenis: "keluar", jumlah: 850000 },
+            { id: 4, tanggal: "2025-01-17", keterangan: "Kebersihan", jenis: "keluar", jumlah: 500000 },
+            { id: 5, tanggal: "2025-01-15", keterangan: "Infaq Kotak Amal", jenis: "masuk", jumlah: 1500000 }
+        ],
+        saldoAwal: 10000000,
+        kisah: [
+            { id: 1, judul: "Kisah Sahabat yang Dermawan", isi: "Abdurrahman bin Auf adalah salah satu sahabat Nabi yang terkenal dermawan. Beliau mendonasikan setengah hartanya untuk kepentingan umat Islam...", gambar: "https://images.unsplash.com/photo-1585036156171-384164a8c675?w=800", tanggal: "2025-01-15" }
+        ],
+        galeri: [
+            { id: 1, judul: "Sholat Idul Fitri", foto: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=800", tanggal: "2025-01-01" }
+        ],
+        pengumuman: [
+            { id: 1, judul: "Kajian Akbar Bulanan", isi: "Insya Allah akan dilaksanakan Kajian Akbar hari Ahad, 26 Januari 2025 ba'da Subuh.", tanggal: "2025-01-20", penting: true }
+        ]
+    };
+
+    // ========== DATA FUNCTIONS ==========
+    function initData() {
+        if (!localStorage.getItem(STORAGE_KEY)) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultData));
+        }
+    }
+
+    function getData() {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY));
+    }
+
+    function saveData(data) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    // ========== NAVIGATION ==========
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('navMenu');
+
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+
+    document.querySelectorAll('.nav-menu a').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+        });
+    });
+
+    // ========== UTILITY FUNCTIONS ==========
+    function formatDate(dateStr) {
+        if (!dateStr) return '-';
+        return new Date(dateStr).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    function formatRupiah(num) {
+        return 'Rp ' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    // ========== JADWAL SHOLAT AUTO API ==========
+    async function renderJadwalSholat() {
+        const container = document.getElementById('jadwalSholat');
+        const tanggalEl = document.getElementById('tanggalHari');
+        
+        // Tampilkan loading
+        container.innerHTML = '<p style="text-align:center; color: var(--gray); grid-column: 1/-1;">Memuat jadwal...</p>';
+        
+        // Koordinat Cikarang, Bekasi
+        const latitude = -6.2615;
+        const longitude = 107.1436;
+        
+        // Tanggal hari ini
+        const today = new Date();
+        const day = today.getDate();
+        const month = today.getMonth() + 1;
+        const year = today.getFullYear();
+        
+        // Format tanggal Indonesia
+        const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+        tanggalEl.textContent = today.toLocaleDateString('id-ID', options);
+        
+        try {
+            // Fetch dari Aladhan API (Gratis, method=20 = Kemenag RI)
+            const response = await fetch(
+                `https://api.aladhan.com/v1/timings/${day}-${month}-${year}?latitude=${latitude}&longitude=${longitude}&method=20`
+            );
+            
+            const result = await response.json();
+            
+            if (result.code === 200) {
+                const timings = result.data.timings;
+                
+                const jadwal = {
+                    subuh: timings.Fajr,
+                    dzuhur: timings.Dhuhr,
+                    ashar: timings.Asr,
+                    maghrib: timings.Maghrib,
+                    isya: timings.Isha
+                };
+                
+                // Simpan ke localStorage (backup jika offline)
+                const data = getData();
+                data.jadwalSholat = jadwal;
+                saveData(data);
+                
+                // Render jadwal
+                displayJadwalSholat(jadwal);
+                
+            } else {
+                throw new Error('API Error');
+            }
+            
+        } catch (error) {
+            console.log('Gagal fetch API, gunakan data lokal:', error);
+            // Fallback ke data localStorage jika API gagal
+            const data = getData();
+            displayJadwalSholat(data.jadwalSholat);
+        }
+    }
+
+    function displayJadwalSholat(jadwal) {
+        const container = document.getElementById('jadwalSholat');
+        const sholatNames = ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'];
+        const sholatLabels = ['Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya'];
+        
+        // Tentukan waktu sholat berikutnya (aktif)
+        const now = new Date();
+        const currentMinutes = now.getHours() * 60 + now.getMinutes();
+        let activeSholat = 'isya';
+        
+        for (let i = 0; i < sholatNames.length; i++) {
+            const timeStr = jadwal[sholatNames[i]];
+            if (timeStr) {
+                const [h, m] = timeStr.split(':').map(Number);
+                const prayerMinutes = h * 60 + m;
+                if (currentMinutes < prayerMinutes) {
+                    activeSholat = sholatNames[i];
+                    break;
+                }
+            }
+        }
+        
+        container.innerHTML = sholatNames.map((name, i) => {
+            const time = jadwal[name] || '--:--';
+            const formattedTime = time.substring(0, 5);
+            
+            return `
+                <div class="jadwal-item ${name === activeSholat ? 'active' : ''}">
+                    <div class="jadwal-nama">${sholatLabels[i]}</div>
+                    <div class="jadwal-waktu">${formattedTime}</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // ========== RENDER TENTANG ==========
+    function renderTentang() {
+        const data = getData();
+        const p = data.pengaturan;
+        document.getElementById('tentangDeskripsi').textContent = p.deskripsi;
+        document.getElementById('tentangVisi').textContent = p.visi;
+        
+        const misiList = p.misi.split(';').filter(m => m.trim());
+        document.getElementById('tentangMisi').innerHTML = `<ul>${misiList.map(m => `<li>${m.trim()}</li>`).join('')}</ul>`;
+    }
+
+    // ========== RENDER PENGURUS ==========
+    function renderPengurus() {
+        const data = getData();
+        const container = document.getElementById('pengurusContainer');
+        
+        const categories = {
+            yayasan: { title: 'Pengurus Yayasan', members: [] },
+            dkm: { title: 'Pengurus DKM', members: [] },
+            majlis: { title: "Majlis Ta'lim", members: [] },
+            lainnya: { title: 'Lainnya', members: [] }
+        };
+
+        data.pengurus.forEach(p => {
+            const cat = categories[p.kategori] || categories.lainnya;
+            cat.members.push(p);
+        });
+
+        let html = '';
+        Object.entries(categories).forEach(([key, cat]) => {
+            if (cat.members.length > 0) {
+                html += `
+                    <div class="pengurus-section">
+                        <h3><i class="fas fa-users"></i> ${cat.title}</h3>
+                        <div class="pengurus-grid">
+                            ${cat.members.map(p => `
+                                <div class="pengurus-card ${p.jabatan.toLowerCase().includes('ketua') ? 'ketua' : ''}">
+                                    <img src="${p.foto || 'https://via.placeholder.com/90?text=👤'}" class="pengurus-photo" onerror="this.src='https://via.placeholder.com/90?text=👤'">
+                                    <h4>${p.nama}</h4>
+                                    <span class="pengurus-jabatan">${p.jabatan}</span>
+                                    ${p.telepon ? `<div class="pengurus-kontak"><i class="fas fa-phone"></i> ${p.telepon}</div>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+        });
+
+        container.innerHTML = html || '<div class="empty-state"><i class="fas fa-users"></i><p>Belum ada data pengurus</p></div>';
+    }
+
+    // ========== RENDER JADWAL KAJIAN ==========
+    function renderJadwalKajian() {
+        const data = getData();
+        const container = document.getElementById('kajianWeekly');
+        const hariIcons = {
+            'Senin': 'fa-calendar-day', 'Selasa': 'fa-calendar-day', 'Rabu': 'fa-calendar-day',
+            'Kamis': 'fa-calendar-day', 'Jumat': 'fa-star', 'Sabtu': 'fa-calendar-day', 'Ahad': 'fa-sun'
+        };
+
+        container.innerHTML = data.jadwalKajian.map(k => `
+            <div class="kajian-day-card">
+                <div class="kajian-day-header">
+                    <i class="fas ${hariIcons[k.hari] || 'fa-calendar'}"></i> ${k.hari}
+                </div>
+                <div class="kajian-day-body">
+                    <p class="kajian-waktu"><i class="fas fa-clock"></i> ${k.waktu}</p>
+                    <h4>${k.tema}</h4>
+                    <p class="kajian-ustadz"><i class="fas fa-user"></i> ${k.ustadz}</p>
+                    <div class="kajian-links">
+                        ${k.videoLink ? `<a href="${k.videoLink}" target="_blank" class="kajian-link-btn video"><i class="fab fa-youtube"></i> Live</a>` : ''}
+                        ${k.audioLink ? `<a href="${k.audioLink}" target="_blank" class="kajian-link-btn audio"><i class="fas fa-headphones"></i> Audio</a>` : ''}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // ========== RENDER KEUANGAN ==========
+    function renderKeuangan() {
+        const data = getData();
+        const keuangan = data.keuangan || [];
+        const saldoAwal = data.saldoAwal || 0;
+        
+        let totalMasuk = 0, totalKeluar = 0;
+        keuangan.forEach(k => {
+            if (k.jenis === 'masuk') totalMasuk += k.jumlah;
+            else totalKeluar += k.jumlah;
+        });
+        const saldo = saldoAwal + totalMasuk - totalKeluar;
+
+        document.getElementById('keuanganSummary').innerHTML = `
+            <div class="keuangan-card pemasukan">
+                <div class="keuangan-icon"><i class="fas fa-arrow-down"></i></div>
+                <p class="keuangan-label">Total Pemasukan</p>
+                <p class="keuangan-amount">${formatRupiah(totalMasuk)}</p>
+                <p class="keuangan-period">Bulan Ini</p>
+            </div>
+            <div class="keuangan-card pengeluaran">
+                <div class="keuangan-icon"><i class="fas fa-arrow-up"></i></div>
+                <p class="keuangan-label">Total Pengeluaran</p>
+                <p class="keuangan-amount">${formatRupiah(totalKeluar)}</p>
+                <p class="keuangan-period">Bulan Ini</p>
+            </div>
+            <div class="keuangan-card saldo">
+                <div class="keuangan-icon"><i class="fas fa-wallet"></i></div>
+                <p class="keuangan-label">Saldo Kas</p>
+                <p class="keuangan-amount">${formatRupiah(saldo)}</p>
+                <p class="keuangan-period">Saat Ini</p>
+            </div>
+        `;
+
+        if (keuangan.length === 0) {
+            document.getElementById('keuanganTable').innerHTML = '';
+            return;
+        }
+
+        document.getElementById('keuanganTable').innerHTML = `
+            <div class="keuangan-table-header">
+                <span><i class="fas fa-list"></i> Riwayat Transaksi</span>
+            </div>
+            <table>
+                <thead><tr><th>Tanggal</th><th>Keterangan</th><th>Pemasukan</th><th>Pengeluaran</th></tr></thead>
+                <tbody>
+                    ${keuangan.slice(0, 10).map(k => `
+                        <tr>
+                            <td>${formatDate(k.tanggal)}</td>
+                            <td>${k.keterangan}</td>
+                            <td class="amount-in">${k.jenis === 'masuk' ? formatRupiah(k.jumlah) : '-'}</td>
+                            <td class="amount-out">${k.jenis === 'keluar' ? formatRupiah(k.jumlah) : '-'}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+    }
+
+    // ========== RENDER KISAH ==========
+    function renderKisah() {
+        const data = getData();
+        const container = document.getElementById('kisahGrid');
+
+        if (!data.kisah || data.kisah.length === 0) {
+            container.innerHTML = '<div class="empty-state"><i class="fas fa-book"></i><p>Belum ada kisah</p></div>';
+            return;
+        }
+
+        container.innerHTML = data.kisah.map(k => `
+            <div class="kisah-card">
+                <div class="kisah-image">
+                    <img src="${k.gambar || 'https://via.placeholder.com/400x200?text=No+Image'}" alt="${k.judul}" onerror="this.src='https://via.placeholder.com/400x200?text=No+Image'">
+                </div>
+                <div class="kisah-content">
+                    <h3>${k.judul}</h3>
+                    <p>${k.isi}</p>
+                    <div class="kisah-meta">
+                        <span><i class="fas fa-calendar"></i> ${formatDate(k.tanggal)}</span>
+                        <a href="#" class="read-more">Baca <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // ========== RENDER DONASI ==========
+    function renderDonasi() {
+        const data = getData();
+        const container = document.getElementById('donasiCards');
+
+        if (!data.donasi || data.donasi.length === 0) {
+            container.innerHTML = '<p>Belum ada informasi rekening</p>';
+            return;
+        }
+
+        container.innerHTML = data.donasi.map(d => `
+            <div class="donasi-card">
+                <div class="donasi-icon"><i class="fas fa-university"></i></div>
+                <div class="donasi-detail">
+                    <h4>${d.bank}</h4>
+                    <div class="rekening">${d.norek}</div>
+                    <div class="atas-nama">a.n. ${d.atasNama}</div>
+                </div>
+                <button class="copy-btn" onclick="copyText('${d.norek.replace(/\s/g, '')}')">
+                    <i class="fas fa-copy"></i> Salin
+                </button>
+            </div>
+        `).join('');
+    }
+
+    // ========== RENDER GALERI ==========
+    function renderGaleri() {
+        const data = getData();
+        const container = document.getElementById('galeriGrid');
+
+        if (!data.galeri || data.galeri.length === 0) {
+            container.innerHTML = '<div class="empty-state"><i class="fas fa-images"></i><p>Belum ada foto</p></div>';
+            return;
+        }
+
+        container.innerHTML = data.galeri.map(g => `
+            <div class="galeri-item" onclick="openLightbox('${g.foto}')">
+                <img src="${g.foto}" alt="${g.judul}" onerror="this.src='https://via.placeholder.com/300x225?text=Error'">
+                <div class="galeri-overlay">
+                    <h4>${g.judul}</h4>
+                    <span><i class="fas fa-calendar"></i> ${formatDate(g.tanggal)}</span>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // ========== RENDER PENGUMUMAN ==========
+    function renderPengumuman() {
+        const data = getData();
+        const container = document.getElementById('pengumumanList');
+
+        if (!data.pengumuman || data.pengumuman.length === 0) {
+            container.innerHTML = '<div class="empty-state"><i class="fas fa-bullhorn"></i><p>Belum ada pengumuman</p></div>';
+            return;
+        }
+
+        container.innerHTML = data.pengumuman.map(p => `
+            <div class="pengumuman-card ${p.penting ? 'penting' : ''}">
+                <span class="pengumuman-badge ${p.penting ? 'penting' : 'info'}">${p.penting ? '⚠️ Penting' : 'ℹ️ Info'}</span>
+                <h3>${p.judul}</h3>
+                <p>${p.isi}</p>
+                <div class="pengumuman-meta"><i class="fas fa-calendar"></i> ${formatDate(p.tanggal)}</div>
+            </div>
+        `).join('');
+    }
+
+    // ========== RENDER FOOTER ==========
+    function renderFooter() {
+        const data = getData();
+        const p = data.pengaturan;
+
+        document.getElementById('footerDeskripsi').textContent = p.deskripsi.substring(0, 150) + '...';
+        
+        document.getElementById('socialLinks').innerHTML = `
+            ${p.facebook ? `<a href="${p.facebook}" target="_blank"><i class="fab fa-facebook-f"></i></a>` : ''}
+            ${p.instagram ? `<a href="${p.instagram}" target="_blank"><i class="fab fa-instagram"></i></a>` : ''}
+            ${p.youtube ? `<a href="${p.youtube}" target="_blank"><i class="fab fa-youtube"></i></a>` : ''}
+            ${p.whatsapp ? `<a href="https://wa.me/${p.whatsapp}" target="_blank"><i class="fab fa-whatsapp"></i></a>` : ''}
+        `;
+
+        document.getElementById('footerKontak').innerHTML = `
+            <li><i class="fas fa-map-marker-alt"></i> ${p.alamat}</li>
+            <li><i class="fas fa-phone"></i> ${p.telepon}</li>
+            <li><i class="fas fa-envelope"></i> <a href="mailto:${p.email}">${p.email}</a></li>
+        `;
+    }
+
+    // ========== LIGHTBOX & COPY ==========
+    function copyText(text) {
+        navigator.clipboard.writeText(text).then(() => alert('Berhasil disalin: ' + text));
+    }
+
+    function openLightbox(src) {
+        document.getElementById('lightboxImg').src = src;
+        document.getElementById('lightbox').classList.add('active');
+    }
+
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('active');
+    }
+
+    document.getElementById('lightbox').addEventListener('click', function(e) {
+        if (e.target === this) closeLightbox();
+    });
+
+    // ========== INITIALIZE ==========
+    document.addEventListener('DOMContentLoaded', () => {
+        initData();
+        renderJadwalSholat();
+        renderTentang();
+        renderPengurus();
+        renderJadwalKajian();
+        renderKeuangan();
+        renderKisah();
+        renderDonasi();
+        renderGaleri();
+        renderPengumuman();
+        renderFooter();
+    });
+  </script> 
+ </body>
+</html>
+      

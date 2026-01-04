@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Masjid Mekarindah</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #1B5E20;
+            --primary-light: #4CAF50;
+            --primary-dark: #0D3B0F;
+            --secondary: #FFD54F;
+            --white: #FFFFFF;
+            --light: #F1F8E9;
+            --gray: #757575;
+            --dark: #212121;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --info: #3498db;
+            --success: #27ae60;
+            --sidebar-width: 250px;
+        }
+
+        html {
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f0f2f5;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+    
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: var(--white);
+            z-index: 1000;
+            transition: transform 0.3s;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header .logo-icon {
+            width: 55px;
+            height: 55px;
+            background: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+        }
+
+        .sidebar-header .logo-icon i { font-size: 1.6rem; color: var(--primary-dark); }
+        .sidebar-header h2 { font-size: 1rem; margin-bottom: 3px; }
+        .sidebar-header span {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            background: rgba(255,255,255,0.1);
+            padding: 2px 10px;
+            border-radius: 10px;
+        }
+
+        .sidebar-menu { padding: 10px 0; list-style: none; }
+        .menu-label {
+            padding: 12px 20px 5px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.5;
+        }
+
+        .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            font-size: 0.85rem;
+        }
+
+        .sidebar-menu li a:hover,
+        .sidebar-menu li a.active {
+            background: rgba(255,255,255,0.1);
+            border-left-color: var(--secondary);
+            color: var(--white);
+        }
+
+        .sidebar-menu li a i { width: 18px; text-align: center; }
+
+        .sidebar-menu li a.site-link {
+            background: var(--secondary);
+            color: var(--primary-dark);
+            margin: 15px;
+            border-radius: 8px;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .sidebar-menu li a.site-link:hover {
+            background: var(--white);
+            border-left-color: transparent;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background: var(--white);
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .top-bar h1 {
+            color: var(--primary-dark);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .current-date { color: var(--gray); font-size: 0.8rem; }
+
+        .menu-toggle {
+            display: none;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        /* ========== STATS GRID ========== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 18px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: white;
+        }
+
+        .stat-icon.i1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .stat-icon.i2 { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .stat-icon.i3 { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .stat-icon.i4 { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+        .stat-icon.i5 { background: linear-gradient(135deg, #fa709a, #fee140); }
+        .stat-icon.i6 { background: linear-gradient(135deg, #a8edea, #fed6e3); }
+
+        .stat-info h3 { font-size: 1.4rem; color: var(--dark); line-height: 1; }
+        .stat-info p { color: var(--gray); font-size: 0.75rem; margin-top: 3px; }
+
+        /* ========== CONTENT SECTION ========== */
+        .content-section {
+            display: none;
+            background: var(--white);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .content-section.active { display: block; }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--light);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .section-header h2 {
+            color: var(--primary-dark);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ========== BUTTONS ========== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-success { background: var(--success); color: white; }
+        .btn-success:hover { background: #219a52; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-danger:hover { background: #c0392b; }
+        .btn-warning { background: var(--warning); color: white; }
+        .btn-sm { padding: 5px 10px; font-size: 0.75rem; }
+
+        /* ========== FORMS ========== */
+        .form-group { margin-bottom: 15px; }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 0.85rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-group textarea { resize: vertical; min-height: 80px; }
+        .form-group small { color: var(--gray); font-size: 0.7rem; margin-top: 4px; display: block; }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .form-row-3 { grid-template-columns: repeat(3, 1fr); }
+
+        .form-check { display: flex; align-items: center; gap: 8px; }
+        .form-check input { width: auto; }
+
+        /* ========== DATA TABLE ========== */
+        .table-responsive { overflow-x: auto; }
+
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th, .data-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            font-size: 0.85rem;
+        }
+
+        .data-table th {
+            background: var(--light);
+            color: var(--primary-dark);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .data-table tr:hover { background: #fafafa; }
+        .data-table img { width: 50px; height: 40px; object-fit: cover; border-radius: 4px; }
+        .data-table .photo-thumb { width: 40px; height: 40px; border-radius: 50%; }
+
+        .action-btns { display: flex; gap: 5px; }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.65rem;
+            font-weight: 600;
+        }
+
+        .badge-danger { background: #fde8e8; color: var(--danger); }
+        .badge-info { background: #e8f4fd; color: var(--info); }
+        .badge-success { background: #d4edda; color: var(--success); }
+        .badge-warning { background: #fff3cd; color: #856404; }
+
+        .text-truncate { max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .amount-in { color: var(--success); font-weight: 600; }
+        .amount-out { color: var(--danger); font-weight: 600; }
+
+        /* ========== JADWAL GRID ========== */
+        .jadwal-form-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+        .jadwal-input { text-align: center; }
+        .jadwal-input label { display: block; margin-bottom: 6px; font-weight: 600; color: var(--primary); font-size: 0.85rem; }
+        .jadwal-input input { text-align: center; font-size: 1.1rem; font-weight: 600; }
+
+        /* ========== MODAL ========== */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-header h3 { color: var(--primary-dark); font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: var(--gray);
+            line-height: 1;
+        }
+
+        .modal-close:hover { color: var(--danger); }
+        .modal-body { padding: 20px; }
+        .modal-footer {
+            padding: 12px 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        /* ========== ALERT ========== */
+        .alert {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .alert-success { background: #d4edda; color: #155724; border-left: 4px solid #28a745; }
+        .alert-danger { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; }
+
+        /* ========== EMPTY STATE ========== */
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--gray); }
+        .empty-state i { font-size: 3rem; margin-bottom: 10px; opacity: 0.2; }
+        .empty-state h4 { margin-bottom: 5px; color: var(--dark); font-size: 1rem; }
+
+        /* ========== KEUANGAN SUMMARY ========== */
+        .keuangan-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .keuangan-box {
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .keuangan-box.masuk { background: #e8f5e9; }
+        .keuangan-box.keluar { background: #ffebee; }
+        .keuangan-box.saldo { background: #fff8e1; }
+
+        .keuangan-box p { font-size: 0.8rem; color: var(--gray); margin-bottom: 5px; }
+        .keuangan-box h3 { font-size: 1.3rem; }
+        .keuangan-box.masuk h3 { color: var(--success); }
+        .keuangan-box.keluar h3 { color: var(--danger); }
+        .keuangan-box.saldo h3 { color: var(--warning); }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 992px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.active { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+            .menu-toggle { display: block; }
+            .form-row, .form-row-3 { grid-template-columns: 1fr; }
+            .jadwal-form-grid { grid-template-columns: repeat(3, 1fr); }
+            .keuangan-summary { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .jadwal-form-grid { grid-template-columns: repeat(2, 1fr); }
+            .top-bar { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-icon"><i class="fas fa-mosque"></i></div>
+            <h2>Masjid Mekarindah</h2>
+            <span>Admin Panel</span>
+        </div>
+
+        <ul class="sidebar-menu">
+            <li class="menu-label">Menu Utama</li>
+            <li><a href="#" class="active" data-section="dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="#" data-section="pengaturan"><i class="fas fa-cog"></i> Pengaturan</a></li>
+            <li><a href="#" data-section="jadwalSholat"><i class="fas fa-clock"></i> Jadwal Sholat</a></li>
+            
+            <li class="menu-label">Konten</li>
+            <li><a href="#" data-section="pengurus"><i class="fas fa-users"></i> Pengurus</a></li>
+            <li><a href="#" data-section="jadwalKajian"><i class="fas fa-book-open"></i> Jadwal Kajian</a></li>
+            <li><a href="#" data-section="keuangan"><i class="fas fa-wallet"></i> Keuangan</a></li>
+            <li><a href="#" data-section="kisah"><i class="fas fa-book-reader"></i> Kisah Inspiratif</a></li>
+            <li><a href="#" data-section="donasi"><i class="fas fa-hand-holding-heart"></i> Donasi</a></li>
+            <li><a href="#" data-section="galeri"><i class="fas fa-images"></i> Galeri</a></li>
+            <li><a href="#" data-section="pengumuman"><i class="fas fa-bullhorn"></i> Pengumuman</a></li>
+            
+            <li class="menu-label">Website</li>
+            <li><a href="index.html" class="site-link"><i class="fas fa-external-link-alt"></i> Lihat Website</a></li>
+        </ul>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <div class="top-bar">
+            <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+            <h1 id="pageTitle"><i class="fas fa-home"></i> Dashboard</h1>
+            <span class="current-date" id="currentDate"></span>
+        </div>
+
+        <div id="alertContainer"></div>
+
+        <!-- ========== DASHBOARD ========== -->
+        <section class="content-section active" id="dashboard">
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-icon i1"><i class="fas fa-users"></i></div><div class="stat-info"><h3 id="statPengurus">0</h3><p>Pengurus</p></div></div>
+                <div class="stat-card"><div class="stat-icon i2"><i class="fas fa-book-open"></i></div><div class="stat-info"><h3 id="statKajian">7</h3><p>Jadwal Kajian</p></div></div>
+                <div class="stat-card"><div class="stat-icon i3"><i class="fas fa-wallet"></i></div><div class="stat-info"><h3 id="statKeuangan">0</h3><p>Transaksi</p></div></div>
+                <div class="stat-card"><div class="stat-icon i4"><i class="fas fa-images"></i></div><div class="stat-info"><h3 id="statGaleri">0</h3><p>Foto</p></div></div>
+                <div class="stat-card"><div class="stat-icon i5"><i class="fas fa-bullhorn"></i></div><div class="stat-info"><h3 id="statPengumuman">0</h3><p>Pengumuman</p></div></div>
+                <div class="stat-card"><div class="stat-icon i6"><i class="fas fa-book"></i></div><div class="stat-info"><h3 id="statKisah">0</h3><p>Kisah</p></div></div>
+            </div>
+
+            <div class="section-header"><h2><i class="fas fa-clock"></i> Pengumuman Terbaru</h2></div>
+            <div id="dashboardPengumuman"></div>
+        </section>
+
+        <!-- ========== PENGATURAN ========== -->
+        <section class="content-section" id="pengaturan">
+            <div class="section-header"><h2><i class="fas fa-cog"></i> Pengaturan Website</h2></div>
+            <form id="pengaturanForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-mosque"></i> Nama Masjid</label>
+                        <input type="text" id="setNama" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-phone"></i> Telepon</label>
+                        <input type="text" id="setTelepon">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-map-marker-alt"></i> Alamat</label>
+                    <textarea id="setAlamat" rows="2"></textarea>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="setEmail">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-info-circle"></i> Deskripsi Masjid</label>
+                    <textarea id="setDeskripsi" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-eye"></i> Visi</label>
+                    <textarea id="setVisi" rows="2"></textarea>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-bullseye"></i> Misi (pisahkan dengan titik koma ;)</label>
+                    <textarea id="setMisi" rows="3" placeholder="Misi 1;Misi 2;Misi 3"></textarea>
+                </div>
+                
+                <h4 style="margin: 20px 0 15px; color: var(--primary);"><i class="fas fa-share-alt"></i> Media Sosial</h4>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fab fa-facebook"></i> Facebook</label>
+                        <input type="url" id="setFacebook" placeholder="https://facebook.com/...">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fab fa-instagram"></i> Instagram</label>
+                        <input type="url" id="setInstagram" placeholder="https://instagram.com/...">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fab fa-youtube"></i> YouTube</label>
+                        <input type="url" id="setYoutube" placeholder="https://youtube.com/...">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fab fa-whatsapp"></i> WhatsApp (62xxx)</label>
+                        <input type="text" id="setWhatsapp" placeholder="6281234567890">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
+            </form>
+        </section>
+
+        <!-- ========== JADWAL SHOLAT ========== -->
+        <section class="content-section" id="jadwalSholat">
+            <div class="section-header"><h2><i class="fas fa-clock"></i> Atur Jadwal Sholat</h2></div>
+            <form id="jadwalSholatForm">
+                <div class="jadwal-form-grid">
+                    <div class="jadwal-input"><label>Subuh</label><input type="time" id="jsSubuh" required></div>
+                    <div class="jadwal-input"><label>Dzuhur</label><input type="time" id="jsDzuhur" required></div>
+                    <div class="jadwal-input"><label>Ashar</label><input type="time" id="jsAshar" required></div>
+                    <div class="jadwal-input"><label>Maghrib</label><input type="time" id="jsMaghrib" required></div>
+                    <div class="jadwal-input"><label>Isya</label><input type="time" id="jsIsya" required></div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Simpan Jadwal</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- ========== PENGURUS ========== -->
+        <section class="content-section" id="pengurus">
+            <div class="section-header">
+                <h2><i class="fas fa-users"></i> Kelola Pengurus</h2>
+                <button class="btn btn-primary" onclick="openModal('pengurusModal')"><i class="fas fa-plus"></i> Tambah</button>
+            </div>
+            <div class="table-responsive" id="pengurusTable"></div>
+        </section>
+
+        <!-- ========== JADWAL KAJIAN ========== -->
+        <section class="content-section" id="jadwalKajian">
+            <div class="section-header"><h2><i class="fas fa-book-open"></i> Jadwal Kajian Mingguan</h2></div>
+            <p style="margin-bottom: 15px; color: var(--gray); font-size: 0.85rem;">Klik tombol Edit untuk mengubah jadwal kajian setiap hari.</p>
+            <div class="table-responsive" id="kajianTable"></div>
+        </section>
+
+        <!-- ========== KEUANGAN ========== -->
+        <section class="content-section" id="keuangan">
+            <div class="section-header">
+                <h2><i class="fas fa-wallet"></i> Laporan Keuangan</h2>
+                <div>
+                    <button class="btn btn-primary" onclick="openModal('saldoModal')"><i class="fas fa-edit"></i> Set Saldo Awal</button>
+                    <button class="btn btn-success" onclick="openModal('keuanganModal')"><i class="fas fa-plus"></i> Tambah Transaksi</button>
+                </div>
+            </div>
+            <div class="keuangan-summary" id="keuanganSummary"></div>
+            <div class="table-responsive" id="keuanganTable"></div>
+        </section>
+
+        <!-- ========== KISAH INSPIRATIF ========== -->
+        <section class="content-section" id="kisah">
+            <div class="section-header">
+                <h2><i class="fas fa-book-reader"></i> Kisah Inspiratif</h2>
+                <button class="btn btn-primary" onclick="openModal('kisahModal')"><i class="fas fa-plus"></i> Tambah</button>
+            </div>
+            <div class="table-responsive" id="kisahTable"></div>
+        </section>
+
+        <!-- ========== DONASI ========== -->
+        <section class="content-section" id="donasi">
+            <div class="section-header">
+                <h2><i class="fas fa-hand-holding-heart"></i> Rekening Donasi</h2>
+                <button class="btn btn-primary" onclick="openModal('donasiModal')"><i class="fas fa-plus"></i> Tambah</button>
+            </div>
+            <div class="table-responsive" id="donasiTable"></div>
+        </section>
+
+        <!-- ========== GALERI ========== -->
+        <section class="content-section" id="galeri">
+            <div class="section-header">
+                <h2><i class="fas fa-images"></i> Galeri Foto</h2>
+                <button class="btn btn-primary" onclick="openModal('galeriModal')"><i class="fas fa-plus"></i> Tambah</button>
+            </div>
+            <div class="table-responsive" id="galeriTable"></div>
+        </section>
+
+        <!-- ========== PENGUMUMAN ========== -->
+        <section class="content-section" id="pengumuman">
+            <div class="section-header">
+                <h2><i class="fas fa-bullhorn"></i> Pengumuman</h2>
+                <button class="btn btn-primary" onclick="openModal('pengumumanModal')"><i class="fas fa-plus"></i> Tambah</button>
+            </div>
+            <div class="table-responsive" id="pengumumanTable"></div>
+        </section>
+    </main>
+
+    <!-- ========== MODALS ========== -->
+
+    <!-- PENGURUS MODAL -->
+    <div class="modal-overlay" id="pengurusModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-user"></i> <span id="pengurusModalTitle">Tambah Pengurus</span></h3>
+                <button class="modal-close" onclick="closeModal('pengurusModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="pengurusId">
+                <div class="form-group">
+                    <label>Nama Lengkap *</label>
+                    <input type="text" id="pengurusNama" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Jabatan *</label>
+                        <input type="text" id="pengurusJabatan" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Kategori *</label>
+                        <select id="pengurusKategori" required>
+                            <option value="yayasan">Pengurus Yayasan</option>
+                            <option value="dkm">Pengurus DKM</option>
+                            <option value="majlis">Majlis Ta'lim</option>
+                            <option value="lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>URL Foto</label>
+                    <input type="url" id="pengurusFoto" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>Telepon</label>
+                    <input type="text" id="pengurusTelepon">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" onclick="closeModal('pengurusModal')">Batal</button>
+                <button class="btn btn-success" onclick="savePengurus()"><i class="fas fa-save"></i> Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- KAJIAN MODAL -->
+    <div class="modal-overlay" id="kajianModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-book-open"></i> Edit Kajian</h3>
+                <button class="modal-close" onclick="closeModal('kajianModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="kajianId">
+                <div class="form-group">
+                    <label>Hari</label>
+                    <input type="text" id="kajianHari" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Tema Kajian *</label>
+                    <input type="text" id="kajianTema" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Pemateri/Ustadz *</label>
+                        <input type="text" id="kajianUstadz" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Waktu *</label>
+                        <input type="text" id="kajianWaktu" required placeholder="Ba'da Maghrib">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Link Video (YouTube Live)</label>
+                    <input type="url" id="kajianVideo" placeholder="https://youtube.com/...">
+                </div>
+                <div class="form-group">
+                    <label>Link Audio (Recording)</label>
+                    <input type="url" id="kajianAudio" placeholder="https://...">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" onclick="closeModal('kajianModal')">Batal</button>
+                <button class="btn btn-success" onclick="saveKajian()"><i class="fas fa-save"></i> Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- KEUANGAN MODAL -->
+    <div class="modal-overlay" id="keuanganModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-wallet"></i> <span id="keuanganModalTitle">Tambah Transaksi</span></h3>
+                <button class="modal-close" onclick="closeModal('keuanganModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="keuanganId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tanggal *</label>
+                        <input type="date" id="keuanganTanggal" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Jenis *</label>
+                        <select id="keuanganJenis" required>
+                            <option value="masuk">Pemasukan</option>
+                            <option value="keluar">Pengeluaran</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Keterangan *</label>
+                    <input type="text" id="keuanganKeterangan" required placeholder="Infaq Jumat, Listrik, dll">
+                </div>
+                <div class="form-group">
+                    <label>Jumlah (Rp) *</label>
+                    <input type="number" id="keuanganJumlah" required min="0">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" onclick="closeModal('keuanganModal')">Batal</button>
+                <button class="btn btn-success" onclick="saveKeuangan()"><i class="fas fa-save"></i> Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SALDO AWAL MODAL -->
+    <div class="modal-overlay" id="saldoModal">
+        <div class="modal" style="max-width: 350px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-wallet"></i> Set Saldo Awal</h3>
+                <button class="modal-close" onclick="closeModal('saldoModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Saldo Awal (Rp)</label>
+                    <input type="number" id="saldoAwalInput" min="0">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" onclick="saveSaldoAwal()"><i class="fas fa-save"></i> Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- KISAH MODAL -->
+    <div class="modal-overlay" id="kisahModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-book"></i> <span id="kisahModalTitle">Tambah Kisah</span></h3>
+                <button class="modal-close" onclick="closeModal('kisahModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="kisahId">
+                <div class="form-group">
+                    <label>Judul *</label>
+                    <input type="text" id="kisahJudul" required>
+                </div>
+                <div class="form-group">
+                    <label>URL Gambar</label>
+                    <input type="url" id="kisahGambar" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>Tanggal</label>
+                    <input type="date" id="kisahTanggal">
+                </div>
+                <div class="form-group">
+                    <label>Isi Kisah *</label>
+                    <textarea id="kisahIsi" rows="5" required></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" onclick="closeModal('kisahModal')">Batal</button>
+                <button class="btn btn-success" onclick="saveKisah()"><i class="fas fa-save"></i> Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DONASI MODAL -->
+    <div class="modal-overlay" id="donasiModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-university"></i> <span id="donasiModalTitle">Tambah Rekening</span></h3>
+                <button class="modal-close" onclick="closeModal('donasiModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="donasiId">
+                <div class="form-group">
+                    <label>Nama Bank *</label>
+                    <input type="text" id="donasiBank" required>
+                </div>
+                <div class="form-group">
+                    <label>Nomor Rekening *</label>
+                    <input type="text" id="donasiNorek" required>
+                </div>
+                <div class="form-group">
+                    <label>Atas Nama *</label>
+                    <input type="text" id="donasiAtasNama" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" onclick="closeModal('donasiModal')">Batal</button>
+                <button class="btn btn-success" onclick="saveDonasi()"><i class="fas fa-save"></i> Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GALERI MODAL -->
+    <div class="modal-overlay" id="galeriModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-image"></i> <span id="galeriModalTitle">Tambah Foto</span></h3>
+                <button class="modal-close" onclick="closeModal('galeriModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="galeriId">
+                <div class="form-group">
+                    <label>Judul/Keterangan *</label>
+                    <input type="text" id="galeriJudul" required>
+                </div>
+                <div class="form-group">
+                    <label>URL Foto *</label>
+                    <input type="url" id="galeriFoto" required placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>Tanggal</label>
+                    <input type="date" id="galeriTanggal">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" onclick="closeModal('galeriModal')">Batal</button>
+                <button class="btn btn-success" onclick="saveGaleri()"><i class="fas fa-save"></i> Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PENGUMUMAN MODAL -->
+    <div class="modal-overlay" id="pengumumanModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-bullhorn"></i> <span id="pengumumanModalTitle">Tambah Pengumuman</span></h3>
+                <button class="modal-close" onclick="closeModal('pengumumanModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="pengumumanId">
+                <div class="form-group">
+                    <label>Judul *</label>
+                    <input type="text" id="pengumumanJudul" required>
+                </div>
+                <div class="form-group">
+                    <label>Isi Pengumuman *</label>
+                    <textarea id="pengumumanIsi" rows="4" required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tanggal *</label>
+                        <input type="date" id="pengumumanTanggal" required>
+                    </div>
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <div class="form-check">
+                            <input type="checkbox" id="pengumumanPenting">
+                            <label for="pengumumanPenting">Tandai PENTING</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" onclick="closeModal('pengumumanModal')">Batal</button>
+                <button class="btn btn-success" onclick="savePengumuman()"><i class="fas fa-save"></i> Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DELETE MODAL -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal" style="max-width: 350px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle" style="color: var(--danger)"></i> Hapus Data</h3>
+                <button class="modal-close" onclick="closeModal('deleteModal')">&times;</button>
+            </div>
+            <div class="modal-body" style="text-align: center; padding: 25px;">
+                <i class="fas fa-trash-alt" style="font-size: 2.5rem; color: var(--danger); opacity: 0.5; margin-bottom: 15px;"></i>
+                <p>Yakin ingin menghapus data ini?</p>
+            </div>
+            <div class="modal-footer" style="justify-content: center;">
+                <button class="btn btn-primary" onclick="closeModal('deleteModal')">Batal</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn"><i class="fas fa-trash"></i> Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== DATA MANAGEMENT ==========
+        const STORAGE_KEY = 'masjidMekarindah';
+
+        const defaultData = {
+            pengaturan: {
+                nama: "Masjid Mekarindah",
+                alamat: "Jalan Puspita II Blok L no.1, Mekarindah, Cikarang",
+                telepon: "0812-3456-7890",
+                email: "masjidmekarindah@gmail.com",
+                deskripsi: "Masjid Mekarindah didirikan dengan tujuan mulia untuk menjadi pusat ibadah, pendidikan Islam, dan kegiatan sosial bagi masyarakat. Kami berkomitmen untuk terus mengembangkan program-program yang bermanfaat bagi umat.",
+                visi: "Menjadikan Masjid Mekarindah sebagai pusat ibadah, pendidikan, dan pemberdayaan umat yang unggul, mandiri, dan berdaya saing.",
+                misi: "Menyelenggarakan ibadah 5 waktu secara berjamaah;Mengadakan kajian rutin harian dan mingguan;Menyelenggarakan pendidikan Al-Quran untuk anak-anak dan dewasa;Melaksanakan kegiatan sosial dan pemberdayaan masyarakat;Mengelola keuangan masjid secara transparan dan akuntabel",
+                facebook: "", instagram: "", youtube: "", whatsapp: ""
+            },
+            jadwalSholat: { subuh: "04:35", dzuhur: "12:05", ashar: "15:20", maghrib: "18:10", isya: "19:25" },
+            donasi: [{ id: 1, bank: "Bank Syariah Indonesia (BSI)", norek: "2022 112 212", atasNama: "Yayasan Islam Mekarindah" }],
+            pengurus: [
+                { id: 1, nama: "H. Ahmad Sudrajat", jabatan: "Ketua Yayasan", kategori: "yayasan", foto: "", telepon: "" },
+                { id: 2, nama: "H. Budi Santoso", jabatan: "Ketua DKM", kategori: "dkm", foto: "", telepon: "" },
+                { id: 3, nama: "Drs. Hendra W.", jabatan: "Sekretaris", kategori: "dkm", foto: "", telepon: "" },
+                { id: 4, nama: "H. Muhammad R.", jabatan: "Bendahara", kategori: "dkm", foto: "", telepon: "" },
+                { id: 5, nama: "Ibu Fatimah", jabatan: "Ketua Majlis Ta'lim", kategori: "majlis", foto: "", telepon: "" }
+            ],
+            jadwalKajian: [
+                { id: 1, hari: "Senin", tema: "Fiqih Ibadah", ustadz: "Ustadz Ahmad", waktu: "Ba'da Maghrib", videoLink: "", audioLink: "" },
+                { id: 2, hari: "Selasa", tema: "Tafsir Al-Quran", ustadz: "Ustadz Ibrahim", waktu: "Ba'da Maghrib", videoLink: "", audioLink: "" },
+                { id: 3, hari: "Rabu", tema: "Hadits Arbain", ustadz: "Ustadz Mahmud", waktu: "Ba'da Maghrib", videoLink: "", audioLink: "" },
+                { id: 4, hari: "Kamis", tema: "Sirah Nabawiyah", ustadz: "Ustadz Yusuf", waktu: "Ba'da Maghrib", videoLink: "", audioLink: "" },
+                { id: 5, hari: "Jumat", tema: "Libur", ustadz: "-", waktu: "-", videoLink: "", audioLink: "" },
+                { id: 6, hari: "Sabtu", tema: "Akhlak & Adab", ustadz: "Ustadz Salim", waktu: "Ba'da Maghrib", videoLink: "", audioLink: "" },
+                { id: 7, hari: "Ahad", tema: "Kajian Ahad Pagi", ustadz: "Ustadz Ahmad", waktu: "06:00 - 07:00", videoLink: "", audioLink: "" }
+            ],
+            keuangan: [],
+            saldoAwal: 10000000,
+            kisah: [],
+            galeri: [],
+            pengumuman: []
+        };
+
+        function initData() {
+            if (!localStorage.getItem(STORAGE_KEY)) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultData));
+            }
+        }
+
+        function getData() { return JSON.parse(localStorage.getItem(STORAGE_KEY)); }
+        function saveData(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+        function generateId(arr) { return arr.length > 0 ? Math.max(...arr.map(i => i.id)) + 1 : 1; }
+
+        // ========== NAVIGATION ==========
+        document.getElementById('menuToggle').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('active');
+        });
+
+        document.querySelectorAll('.sidebar-menu a[data-section]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = this.dataset.section;
+                document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                document.getElementById(section).classList.add('active');
+                document.getElementById('sidebar').classList.remove('active');
+                
+                const titles = {
+                    dashboard: '<i class="fas fa-home"></i> Dashboard',
+                    pengaturan: '<i class="fas fa-cog"></i> Pengaturan',
+                    jadwalSholat: '<i class="fas fa-clock"></i> Jadwal Sholat',
+                    pengurus: '<i class="fas fa-users"></i> Pengurus',
+                    jadwalKajian: '<i class="fas fa-book-open"></i> Jadwal Kajian',
+                    keuangan: '<i class="fas fa-wallet"></i> Keuangan',
+                    kisah: '<i class="fas fa-book-reader"></i> Kisah Inspiratif',
+                    donasi: '<i class="fas fa-hand-holding-heart"></i> Donasi',
+                    galeri: '<i class="fas fa-images"></i> Galeri',
+                    pengumuman: '<i class="fas fa-bullhorn"></i> Pengumuman'
+                };
+                document.getElementById('pageTitle').innerHTML = titles[section] || 'Dashboard';
+            });
+        });
+
+        // ========== UTILITIES ==========
+        function formatDate(d) { return d ? new Date(d).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'; }
+        function formatRupiah(n) { return 'Rp ' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+        function showAlert(msg, type = 'success') {
+            const c = document.getElementById('alertContainer');
+            const a = document.createElement('div');
+            a.className = `alert alert-${type}`;
+            a.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${msg}`;
+            c.appendChild(a);
+            setTimeout(() => a.remove(), 3000);
+        }
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function today() { return new Date().toISOString().split('T')[0]; }
+
+        document.querySelectorAll('.modal-overlay').forEach(m => {
+            m.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
+        });
+
+        // ========== DASHBOARD ==========
+        function updateDashboard() {
+            const d = getData();
+            document.getElementById('statPengurus').textContent = d.pengurus?.length || 0;
+            document.getElementById('statKajian').textContent = d.jadwalKajian?.length || 7;
+            document.getElementById('statKeuangan').textContent = d.keuangan?.length || 0;
+            document.getElementById('statGaleri').textContent = d.galeri?.length || 0;
+            document.getElementById('statPengumuman').textContent = d.pengumuman?.length || 0;
+            document.getElementById('statKisah').textContent = d.kisah?.length || 0;
+
+            const c = document.getElementById('dashboardPengumuman');
+            if (!d.pengumuman || d.pengumuman.length === 0) {
+                c.innerHTML = '<div class="empty-state"><i class="fas fa-bullhorn"></i><p>Belum ada pengumuman</p></div>';
+            } else {
+                c.innerHTML = `<table class="data-table"><thead><tr><th>Judul</th><th>Tanggal</th><th>Status</th></tr></thead><tbody>
+                    ${d.pengumuman.slice(0, 5).map(p => `<tr><td>${p.judul}</td><td>${formatDate(p.tanggal)}</td><td><span class="badge ${p.penting ? 'badge-danger' : 'badge-info'}">${p.penting ? 'Penting' : 'Info'}</span></td></tr>`).join('')}
+                </tbody></table>`;
+            }
+        }
+
+        // ========== PENGATURAN ==========
+        function loadPengaturan() {
+            const p = getData().pengaturan;
+            document.getElementById('setNama').value = p.nama || '';
+            document.getElementById('setAlamat').value = p.alamat || '';
+            document.getElementById('setTelepon').value = p.telepon || '';
+            document.getElementById('setEmail').value = p.email || '';
+            document.getElementById('setDeskripsi').value = p.deskripsi || '';
+            document.getElementById('setVisi').value = p.visi || '';
+            document.getElementById('setMisi').value = p.misi || '';
+            document.getElementById('setFacebook').value = p.facebook || '';
+            document.getElementById('setInstagram').value = p.instagram || '';
+            document.getElementById('setYoutube').value = p.youtube || '';
+            document.getElementById('setWhatsapp').value = p.whatsapp || '';
+        }
+
+        document.getElementById('pengaturanForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const d = getData();
+            d.pengaturan = {
+                nama: document.getElementById('setNama').value.trim(),
+                alamat: document.getElementById('setAlamat').value.trim(),
+                telepon: document.getElementById('setTelepon').value.trim(),
+                email: document.getElementById('setEmail').value.trim(),
+                deskripsi: document.getElementById('setDeskripsi').value.trim(),
+                visi: document.getElementById('setVisi').value.trim(),
+                misi: document.getElementById('setMisi').value.trim(),
+                facebook: document.getElementById('setFacebook').value.trim(),
+                instagram: document.getElementById('setInstagram').value.trim(),
+                youtube: document.getElementById('setYoutube').value.trim(),
+                whatsapp: document.getElementById('setWhatsapp').value.trim()
+            };
+            saveData(d);
+            showAlert('Pengaturan berhasil disimpan!');
+        });
+
+        // ========== JADWAL SHOLAT ==========
+        function loadJadwalSholat() {
+            const j = getData().jadwalSholat;
+            document.getElementById('jsSubuh').value = j.subuh;
+            document.getElementById('jsDzuhur').value = j.dzuhur;
+            document.getElementById('jsAshar').value = j.ashar;
+            document.getElementById('jsMaghrib').value = j.maghrib;
+            document.getElementById('jsIsya').value = j.isya;
+        }
+
+        document.getElementById('jadwalSholatForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const d = getData();
+            d.jadwalSholat = {
+                subuh: document.getElementById('jsSubuh').value,
+                dzuhur: document.getElementById('jsDzuhur').value,
+                ashar: document.getElementById('jsAshar').value,
+                maghrib: document.getElementById('jsMaghrib').value,
+                isya: document.getElementById('jsIsya').value
+            };
+            saveData(d);
+            showAlert('Jadwal sholat berhasil disimpan!');
+        });
+
+        // ========== PENGURUS CRUD ==========
+        function renderPengurus() {
+            const d = getData();
+            const c = document.getElementById('pengurusTable');
+            if (!d.pengurus || d.pengurus.length === 0) {
+                c.innerHTML = '<div class="empty-state"><i class="fas fa-users"></i><h4>Belum ada pengurus</h4></div>';
+                return;
+            }
+            c.innerHTML = `<table class="data-table"><thead><tr><th>Foto</th><th>Nama</th><th>Jabatan</th><th>Kategori</th><th>Aksi</th></tr></thead><tbody>
+                ${d.pengurus.map(p => `<tr>
+                    <td><img src="${p.foto || 'https://via.placeholder.com/40?text=👤'}" class="photo-thumb" onerror="this.src='https://via.placeholder.com/40?text=👤'"></td>
+                    <td>${p.nama}</td><td>${p.jabatan}</td>
+                    <td><span class="badge badge-info">${p.kategori}</span></td>
+                    <td class="action-btns">
+                        <button class="btn btn-warning btn-sm" onclick="editPengurus(${p.id})"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deletePengurus(${p.id})"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`).join('')}
+            </tbody></table>`;
+        }
+
+        function savePengurus() {
+            const id = document.getElementById('pengurusId').value;
+            const obj = {
+                nama: document.getElementById('pengurusNama').value.trim(),
+                jabatan: document.getElementById('pengurusJabatan').value.trim(),
+                kategori: document.getElementById('pengurusKategori').value,
+                foto: document.getElementById('pengurusFoto').value.trim(),
+                telepon: document.getElementById('pengurusTelepon').value.trim()
+            };
+            if (!obj.nama || !obj.jabatan) return showAlert('Nama dan jabatan harus diisi!', 'danger');
+
+            const d = getData();
+            if (id) {
+                const idx = d.pengurus.findIndex(p => p.id === parseInt(id));
+                if (idx !== -1) d.pengurus[idx] = { id: parseInt(id), ...obj };
+            } else {
+                d.pengurus.push({ id: generateId(d.pengurus), ...obj });
+            }
+            saveData(d);
+            closeModal('pengurusModal');
+            renderPengurus();
+            updateDashboard();
+            showAlert('Data pengurus berhasil disimpan!');
+            resetForm('pengurus');
+        }
+
+        function editPengurus(id) {
+            const p = getData().pengurus.find(x => x.id === id);
+            if (p) {
+                document.getElementById('pengurusId').value = p.id;
+                document.getElementById('pengurusNama').value = p.nama;
+                document.getElementById('pengurusJabatan').value = p.jabatan;
+                document.getElementById('pengurusKategori').value = p.kategori;
+                document.getElementById('pengurusFoto').value = p.foto || '';
+                document.getElementById('pengurusTelepon').value = p.telepon || '';
+                document.getElementById('pengurusModalTitle').textContent = 'Edit Pengurus';
+                openModal('pengurusModal');
+            }
+        }
+
+        function deletePengurus(id) { confirmDelete(() => { const d = getData(); d.pengurus = d.pengurus.filter(p => p.id !== id); saveData(d); renderPengurus(); updateDashboard(); showAlert('Data dihapus!'); }); }
+
+        // ========== JADWAL KAJIAN ==========
+        function renderKajian() {
+            const d = getData();
+            const c = document.getElementById('kajianTable');
+            c.innerHTML = `<table class="data-table"><thead><tr><th>Hari</th><th>Tema</th><th>Ustadz</th><th>Waktu</th><th>Link</th><th>Aksi</th></tr></thead><tbody>
+                ${d.jadwalKajian.map(k => `<tr>
+                    <td><strong>${k.hari}</strong></td><td>${k.tema}</td><td>${k.ustadz}</td><td>${k.waktu}</td>
+                    <td>${k.videoLink ? '<span class="badge badge-danger">Video</span>' : ''} ${k.audioLink ? '<span class="badge badge-warning">Audio</span>' : ''}</td>
+                    <td><button class="btn btn-warning btn-sm" onclick="editKajian(${k.id})"><i class="fas fa-edit"></i></button></td>
+                </tr>`).join('')}
+            </tbody></table>`;
+        }
+
+        function editKajian(id) {
+            const k = getData().jadwalKajian.find(x => x.id === id);
+            if (k) {
+                document.getElementById('kajianId').value = k.id;
+                document.getElementById('kajianHari').value = k.hari;
+                document.getElementById('kajianTema').value = k.tema;
+                document.getElementById('kajianUstadz').value = k.ustadz;
+                document.getElementById('kajianWaktu').value = k.waktu;
+                document.getElementById('kajianVideo').value = k.videoLink || '';
+                document.getElementById('kajianAudio').value = k.audioLink || '';
+                openModal('kajianModal');
+            }
+        }
+
+        function saveKajian() {
+            const id = parseInt(document.getElementById('kajianId').value);
+            const d = getData();
+            const idx = d.jadwalKajian.findIndex(k => k.id === id);
+            if (idx !== -1) {
+                d.jadwalKajian[idx] = {
+                    id, hari: document.getElementById('kajianHari').value,
+                    tema: document.getElementById('kajianTema').value.trim(),
+                    ustadz: document.getElementById('kajianUstadz').value.trim(),
+                    waktu: document.getElementById('kajianWaktu').value.trim(),
+                    videoLink: document.getElementById('kajianVideo').value.trim(),
+                    audioLink: document.getElementById('kajianAudio').value.trim()
+                };
+            }
+            saveData(d);
+            closeModal('kajianModal');
+            renderKajian();
+            showAlert('Jadwal kajian berhasil diupdate!');
+        }
+
+        // ========== KEUANGAN ==========
+        function renderKeuangan() {
+            const d = getData();
+            const k = d.keuangan || [];
+            let masuk = 0, keluar = 0;
+            k.forEach(t => { if (t.jenis === 'masuk') masuk += t.jumlah; else keluar += t.jumlah; });
+            const saldo = (d.saldoAwal || 0) + masuk - keluar;
+
+            document.getElementById('keuanganSummary').innerHTML = `
+                <div class="keuangan-box masuk"><p>Pemasukan</p><h3>${formatRupiah(masuk)}</h3></div>
+                <div class="keuangan-box keluar"><p>Pengeluaran</p><h3>${formatRupiah(keluar)}</h3></div>
+                <div class="keuangan-box saldo"><p>Saldo</p><h3>${formatRupiah(saldo)}</h3></div>
+            `;
+
+            const c = document.getElementById('keuanganTable');
+            if (k.length === 0) { c.innerHTML = '<div class="empty-state"><i class="fas fa-wallet"></i><h4>Belum ada transaksi</h4></div>'; return; }
+
+            c.innerHTML = `<table class="data-table"><thead><tr><th>Tanggal</th><th>Keterangan</th><th>Jenis</th><th>Jumlah</th><th>Aksi</th></tr></thead><tbody>
+                ${k.map(t => `<tr>
+                    <td>${formatDate(t.tanggal)}</td><td>${t.keterangan}</td>
+                    <td><span class="badge ${t.jenis === 'masuk' ? 'badge-success' : 'badge-danger'}">${t.jenis === 'masuk' ? 'Masuk' : 'Keluar'}</span></td>
+                    <td class="${t.jenis === 'masuk' ? 'amount-in' : 'amount-out'}">${formatRupiah(t.jumlah)}</td>
+                    <td class="action-btns">
+                        <button class="btn btn-warning btn-sm" onclick="editKeuangan(${t.id})"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteKeuangan(${t.id})"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`).join('')}
+            </tbody></table>`;
+        }
+
+        function saveKeuangan() {
+            const id = document.getElementById('keuanganId').value;
+            const obj = {
+                tanggal: document.getElementById('keuanganTanggal').value,
+                jenis: document.getElementById('keuanganJenis').value,
+                keterangan: document.getElementById('keuanganKeterangan').value.trim(),
+                jumlah: parseInt(document.getElementById('keuanganJumlah').value)
+            };
+            if (!obj.tanggal || !obj.keterangan || !obj.jumlah) return showAlert('Semua field harus diisi!', 'danger');
+
+            const d = getData();
+            if (id) {
+                const idx = d.keuangan.findIndex(k => k.id === parseInt(id));
+                if (idx !== -1) d.keuangan[idx] = { id: parseInt(id), ...obj };
+            } else {
+                d.keuangan.unshift({ id: generateId(d.keuangan), ...obj });
+            }
+            saveData(d);
+            closeModal('keuanganModal');
+            renderKeuangan();
+            updateDashboard();
+            showAlert('Transaksi berhasil disimpan!');
+            resetForm('keuangan');
+        }
+
+        function editKeuangan(id) {
+            const k = getData().keuangan.find(x => x.id === id);
+            if (k) {
+                document.getElementById('keuanganId').value = k.id;
+                document.getElementById('keuanganTanggal').value = k.tanggal;
+                document.getElementById('keuanganJenis').value = k.jenis;
+                document.getElementById('keuanganKeterangan').value = k.keterangan;
+                document.getElementById('keuanganJumlah').value = k.jumlah;
+                document.getElementById('keuanganModalTitle').textContent = 'Edit Transaksi';
+                openModal('keuanganModal');
+            }
+        }
+
+        function deleteKeuangan(id) { confirmDelete(() => { const d = getData(); d.keuangan = d.keuangan.filter(k => k.id !== id); saveData(d); renderKeuangan(); updateDashboard(); showAlert('Data dihapus!'); }); }
+
+        function saveSaldoAwal() {
+            const d = getData();
+            d.saldoAwal = parseInt(document.getElementById('saldoAwalInput').value) || 0;
+            saveData(d);
+            closeModal('saldoModal');
+            renderKeuangan();
+            showAlert('Saldo awal berhasil disimpan!');
+        }
+
+        // ========== KISAH ==========
+        function renderKisah() {
+            const d = getData();
+            const c = document.getElementById('kisahTable');
+            if (!d.kisah || d.kisah.length === 0) { c.innerHTML = '<div class="empty-state"><i class="fas fa-book"></i><h4>Belum ada kisah</h4></div>'; return; }
+            c.innerHTML = `<table class="data-table"><thead><tr><th>Gambar</th><th>Judul</th><th>Tanggal</th><th>Aksi</th></tr></thead><tbody>
+                ${d.kisah.map(k => `<tr>
+                    <td><img src="${k.gambar || 'https://via.placeholder.com/50x40?text=No'}" onerror="this.src='https://via.placeholder.com/50x40?text=No'"></td>
+                    <td class="text-truncate">${k.judul}</td><td>${formatDate(k.tanggal)}</td>
+                    <td class="action-btns">
+                        <button class="btn btn-warning btn-sm" onclick="editKisah(${k.id})"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteKisah(${k.id})"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`).join('')}
+            </tbody></table>`;
+        }
+
+        function saveKisah() {
+            const id = document.getElementById('kisahId').value;
+            const obj = { judul: document.getElementById('kisahJudul').value.trim(), gambar: document.getElementById('kisahGambar').value.trim(), tanggal: document.getElementById('kisahTanggal').value || today(), isi: document.getElementById('kisahIsi').value.trim() };
+            if (!obj.judul || !obj.isi) return showAlert('Judul dan isi harus diisi!', 'danger');
+            const d = getData();
+            if (id) { const idx = d.kisah.findIndex(k => k.id === parseInt(id)); if (idx !== -1) d.kisah[idx] = { id: parseInt(id), ...obj }; }
+            else { d.kisah.unshift({ id: generateId(d.kisah), ...obj }); }
+            saveData(d); closeModal('kisahModal'); renderKisah(); updateDashboard(); showAlert('Kisah berhasil disimpan!'); resetForm('kisah');
+        }
+
+        function editKisah(id) { const k = getData().kisah.find(x => x.id === id); if (k) { document.getElementById('kisahId').value = k.id; document.getElementById('kisahJudul').value = k.judul; document.getElementById('kisahGambar').value = k.gambar || ''; document.getElementById('kisahTanggal').value = k.tanggal || ''; document.getElementById('kisahIsi').value = k.isi; document.getElementById('kisahModalTitle').textContent = 'Edit Kisah'; openModal('kisahModal'); } }
+        function deleteKisah(id) { confirmDelete(() => { const d = getData(); d.kisah = d.kisah.filter(k => k.id !== id); saveData(d); renderKisah(); updateDashboard(); showAlert('Data dihapus!'); }); }
+
+        // ========== DONASI ==========
+        function renderDonasi() {
+            const d = getData();
+            const c = document.getElementById('donasiTable');
+            if (!d.donasi || d.donasi.length === 0) { c.innerHTML = '<div class="empty-state"><i class="fas fa-university"></i><h4>Belum ada rekening</h4></div>'; return; }
+            c.innerHTML = `<table class="data-table"><thead><tr><th>Bank</th><th>No. Rekening</th><th>Atas Nama</th><th>Aksi</th></tr></thead><tbody>
+                ${d.donasi.map(x => `<tr><td>${x.bank}</td><td><strong>${x.norek}</strong></td><td>${x.atasNama}</td>
+                <td class="action-btns"><button class="btn btn-warning btn-sm" onclick="editDonasi(${x.id})"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-sm" onclick="deleteDonasi(${x.id})"><i class="fas fa-trash"></i></button></td></tr>`).join('')}
+            </tbody></table>`;
+        }
+
+        function saveDonasi() {
+            const id = document.getElementById('donasiId').value;
+            const obj = { bank: document.getElementById('donasiBank').value.trim(), norek: document.getElementById('donasiNorek').value.trim(), atasNama: document.getElementById('donasiAtasNama').value.trim() };
+            if (!obj.bank || !obj.norek || !obj.atasNama) return showAlert('Semua field harus diisi!', 'danger');
+            const d = getData();
+            if (id) { const idx = d.donasi.findIndex(x => x.id === parseInt(id)); if (idx !== -1) d.donasi[idx] = { id: parseInt(id), ...obj }; }
+            else { d.donasi.push({ id: generateId(d.donasi), ...obj }); }
+            saveData(d); closeModal('donasiModal'); renderDonasi(); showAlert('Rekening berhasil disimpan!'); resetForm('donasi');
+        }
+
+        function editDonasi(id) { const x = getData().donasi.find(d => d.id === id); if (x) { document.getElementById('donasiId').value = x.id; document.getElementById('donasiBank').value = x.bank; document.getElementById('donasiNorek').value = x.norek; document.getElementById('donasiAtasNama').value = x.atasNama; document.getElementById('donasiModalTitle').textContent = 'Edit Rekening'; openModal('donasiModal'); } }
+        function deleteDonasi(id) { confirmDelete(() => { const d = getData(); d.donasi = d.donasi.filter(x => x.id !== id); saveData(d); renderDonasi(); showAlert('Data dihapus!'); }); }
+
+        // ========== GALERI ==========
+        function renderGaleri() {
+            const d = getData();
+            const c = document.getElementById('galeriTable');
+            if (!d.galeri || d.galeri.length === 0) { c.innerHTML = '<div class="empty-state"><i class="fas fa-images"></i><h4>Belum ada foto</h4></div>'; return; }
+            c.innerHTML = `<table class="data-table"><thead><tr><th>Foto</th><th>Judul</th><th>Tanggal</th><th>Aksi</th></tr></thead><tbody>
+                ${d.galeri.map(g => `<tr><td><img src="${g.foto}" onerror="this.src='https://via.placeholder.com/50x40?text=Err'"></td><td>${g.judul}</td><td>${formatDate(g.tanggal)}</td>
+                <td class="action-btns"><button class="btn btn-warning btn-sm" onclick="editGaleri(${g.id})"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-sm" onclick="deleteGaleri(${g.id})"><i class="fas fa-trash"></i></button></td></tr>`).join('')}
+            </tbody></table>`;
+        }
+
+        function saveGaleri() {
+            const id = document.getElementById('galeriId').value;
+            const obj = { judul: document.getElementById('galeriJudul').value.trim(), foto: document.getElementById('galeriFoto').value.trim(), tanggal: document.getElementById('galeriTanggal').value || today() };
+            if (!obj.judul || !obj.foto) return showAlert('Judul dan URL foto harus diisi!', 'danger');
+            const d = getData();
+            if (id) { const idx = d.galeri.findIndex(g => g.id === parseInt(id)); if (idx !== -1) d.galeri[idx] = { id: parseInt(id), ...obj }; }
+            else { d.galeri.unshift({ id: generateId(d.galeri), ...obj }); }
+            saveData(d); closeModal('galeriModal'); renderGaleri(); updateDashboard(); showAlert('Foto berhasil disimpan!'); resetForm('galeri');
+        }
+
+        function editGaleri(id) { const g = getData().galeri.find(x => x.id === id); if (g) { document.getElementById('galeriId').value = g.id; document.getElementById('galeriJudul').value = g.judul; document.getElementById('galeriFoto').value = g.foto; document.getElementById('galeriTanggal').value = g.tanggal || ''; document.getElementById('galeriModalTitle').textContent = 'Edit Foto'; openModal('galeriModal'); } }
+        function deleteGaleri(id) { confirmDelete(() => { const d = getData(); d.galeri = d.galeri.filter(g => g.id !== id); saveData(d); renderGaleri(); updateDashboard(); showAlert('Data dihapus!'); }); }
+
+        // ========== PENGUMUMAN ==========
+        function renderPengumuman() {
+            const d = getData();
+            const c = document.getElementById('pengumumanTable');
+            if (!d.pengumuman || d.pengumuman.length === 0) { c.innerHTML = '<div class="empty-state"><i class="fas fa-bullhorn"></i><h4>Belum ada pengumuman</h4></div>'; return; }
+            c.innerHTML = `<table class="data-table"><thead><tr><th>Judul</th><th>Tanggal</th><th>Status</th><th>Aksi</th></tr></thead><tbody>
+                ${d.pengumuman.map(p => `<tr><td class="text-truncate">${p.judul}</td><td>${formatDate(p.tanggal)}</td>
+                <td><span class="badge ${p.penting ? 'badge-danger' : 'badge-info'}">${p.penting ? 'Penting' : 'Info'}</span></td>
+                <td class="action-btns"><button class="btn btn-warning btn-sm" onclick="editPengumuman(${p.id})"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-sm" onclick="deletePengumuman(${p.id})"><i class="fas fa-trash"></i></button></td></tr>`).join('')}
+            </tbody></table>`;
+        }
+
+        function savePengumuman() {
+            const id = document.getElementById('pengumumanId').value;
+            const obj = { judul: document.getElementById('pengumumanJudul').value.trim(), isi: document.getElementById('pengumumanIsi').value.trim(), tanggal: document.getElementById('pengumumanTanggal').value, penting: document.getElementById('pengumumanPenting').checked };
+            if (!obj.judul || !obj.isi || !obj.tanggal) return showAlert('Semua field harus diisi!', 'danger');
+            const d = getData();
+            if (id) { const idx = d.pengumuman.findIndex(p => p.id === parseInt(id)); if (idx !== -1) d.pengumuman[idx] = { id: parseInt(id), ...obj }; }
+            else { d.pengumuman.unshift({ id: generateId(d.pengumuman), ...obj }); }
+            saveData(d); closeModal('pengumumanModal'); renderPengumuman(); updateDashboard(); showAlert('Pengumuman berhasil disimpan!'); resetForm('pengumuman');
+        }
+
+        function editPengumuman(id) { const p = getData().pengumuman.find(x => x.id === id); if (p) { document.getElementById('pengumumanId').value = p.id; document.getElementById('pengumumanJudul').value = p.judul; document.getElementById('pengumumanIsi').value = p.isi; document.getElementById('pengumumanTanggal').value = p.tanggal; document.getElementById('pengumumanPenting').checked = p.penting; document.getElementById('pengumumanModalTitle').textContent = 'Edit Pengumuman'; openModal('pengumumanModal'); } }
+        function deletePengumuman(id) { confirmDelete(() => { const d = getData(); d.pengumuman = d.pengumuman.filter(p => p.id !== id); saveData(d); renderPengumuman(); updateDashboard(); showAlert('Data dihapus!'); }); }
+
+        // ========== HELPERS ==========
+        function confirmDelete(callback) {
+            document.getElementById('confirmDeleteBtn').onclick = () => { callback(); closeModal('deleteModal'); };
+            openModal('deleteModal');
+        }
+
+        function resetForm(name) {
+            document.getElementById(name + 'Id').value = '';
+            const titleEl = document.getElementById(name + 'ModalTitle');
+            if (titleEl) titleEl.textContent = 'Tambah ' + name.charAt(0).toUpperCase() + name.slice(1);
+        }
+
+        // ========== INIT ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            initData();
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById('saldoAwalInput').value = getData().saldoAwal || 0;
+            document.getElementById('keuanganTanggal').value = today();
+            
+            updateDashboard();
+            loadPengaturan();
+            loadJadwalSholat();
+            renderPengurus();
+            renderKajian();
+            renderKeuangan();
+            renderKisah();
+            renderDonasi();
+            renderGaleri();
+            renderPengumuman();
+        });
+    </script>
+</body>
+</html>
