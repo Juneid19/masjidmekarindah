@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -1230,8 +1231,43 @@ body {
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    min-height: 550px;
-    height: auto;
+    height: 750px;
+}
+
+.radio-embed iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    transform: scale(1);
+    transform-origin: top center;
+}
+
+/* Laptop besar */
+@media (min-width: 1200px) {
+    .radio-embed {
+        height: 800px;
+    }
+}
+
+/* Laptop standar */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .radio-embed {
+        height: 750px;
+    }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 991px) {
+    .radio-embed {
+        height: 700px;
+    }
+}
+
+/* HP */
+@media (max-width: 767px) {
+    .radio-embed {
+        height: 650px;
+    }
 }
 
 .radio-embed iframe {
