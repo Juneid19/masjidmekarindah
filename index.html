@@ -679,7 +679,7 @@
             z-index: 10;
         }
         
-        .modal img {
+        .modal img {o
             width: 100%;
             height: 250px;
             object-fit: cover;
@@ -870,35 +870,39 @@
         }
         
         /* Radio Section */
-        .radio-section {
-            background: var(--primary);
-            padding: 30px 20px;
-        }
-        
-        .radio-section h3 {
-            text-align: center;
-            color: var(--white);
-            margin-bottom: 20px;
-        }
-        
-        .radio-section h3 i {
-            color: var(--gold);
-            margin-right: 10px;
-        }
-        
-        .radio-embed {
-            max-width: 1200px;
-            margin: 0 auto;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        
-        .radio-embed iframe {
-            width: 100%;
-            height: 750px;
-            border: none;
-        }
+.radio-section {
+    background: var(--primary);
+    padding: 30px 20px;
+    width: 100%;
+}
+
+.radio-section h3 {
+    text-align: center;
+    color: var(--white);
+    margin-bottom: 20px;
+}
+
+.radio-section h3 i {
+    color: var(--gold);
+    margin-right: 10px;
+}
+
+.radio-embed {
+    max-width: 1200px;
+    margin: 0 auto;
+    border-radius: 15px;
+    overflow: visible;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    background: var(--white);
+}
+
+.radio-embed iframe {
+    width: 100%;
+    height: 800px;
+    border: none;
+    display: block;
+    min-height: 700px;
+}
         
         /* Footer */
         footer {
@@ -965,76 +969,24 @@
         
         /* Responsive */
         @media (max-width: 768px) {
-            nav ul {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: var(--primary);
-                flex-direction: column;
-                padding: 20px;
-                gap: 15px;
-            }
-            
-            nav ul.active {
-                display: flex;
-            }
-            
-            .mobile-toggle {
-                display: block;
-            }
-            
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .hero .ayat-arabic {
-                font-size: 1.5rem;
-            }
-            
-            .jadwal-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .jadwal-item:last-child {
-                grid-column: span 2;
-            }
-            
-            .tentang-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .keuangan-summary {
-                grid-template-columns: 1fr;
-            }
-            
-            .kisah-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .radio-embed iframe {
-                height: 600px;
-            }
-            
-            section {
-                padding: 40px 15px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .jadwal-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .jadwal-item:last-child {
-                grid-column: auto;
-            }
-            
-            .radio-embed iframe {
-                height: 500px;
-            }
-        }
+    /* ... kode lain ... */
+    
+    .radio-embed iframe {
+        height: 750px;
+        min-height: 650px;
+    }
+    
+    /* ... kode lain ... */
+}
+
+@media (max-width: 480px) {
+    /* ... kode lain ... */
+    
+    .radio-embed iframe {
+        height: 700px;
+        min-height: 600px;
+    }
+}
     </style>
 </head>
 <body>
