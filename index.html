@@ -1795,50 +1795,56 @@
         }
         
         function renderKeuangan() {
-            const summary = document.getElementById('keuanganSummary');
-            const table = document.getElementById('keuanganTable');
-            if (!summary || !table) return;
-            
-            const keuangan = masjidData.keuangan || {};
-            const saldoAwal = keuangan.saldoAwal || 0;
-            const transaksi = keuangan.transaksi || [];
-            
-            let totalPemasukan = 0;
-            let totalPengeluaran = 0;
-            
-            transaksi.forEach(t => {
-                if (t.jenis === 'pemasukan') {
-                    totalPemasukan += t.jumlah;
-                } else {
-                    totalPengeluaran += t.jumlah;
-                }
-            });
-            
-            const saldo = saldoAwal + totalPemasukan - totalPengeluaran;
-            
-            summary.innerHTML = `
-                <div class="summary-card pemasukan">
-                    <h4><i class="fas fa-arrow-down"></i> Total Pemasukan</h4>
-                    <div class="amount">Rp ${formatNumber(totalPemasukan)}</div>
-                </div>
-                <div class="summary-card pengeluaran">
-                    <h4><i class="fas fa-arrow-up"></i> Total Pengeluaran</h4>
-                    <div class="amount">Rp ${formatNumber(totalPengeluaran)}</div>
-                </div>
-                <div class="summary-card saldo">
-                    <h4><i class="fas fa-wallet"></i> Saldo Saat Ini</h4>
-                    <div class="amount">Rp ${formatNumber(saldo)}</div>
-                </div>
-            `;
-            
-            table.innerHTML = transaksi.map(t => `
-                <tr>
-                    <td>${formatDate(t.tanggal)}</td>
-                    <td>${t.keterangan}</td>
-                    <td class="${t.jenis}">${t.jenis === 'pemasukan' ? '+' : '-'} Rp ${formatNumber(t.jumlah)}</td>
-                </tr>
-            `).join('') || '<tr><td colspan="3" style="text-align: center;">Belum ada transaksi.</td></tr>';
+    const summary = document.getElementById('keuanganSummary');
+    const table = document.getElementById('keuanganTable');
+    
+    if (!summary || !table) return;
+    
+    // Fix: pastikan keuangan adalah object, bukan array
+    let keuangan = masjidData.keuangan;
+    if (!keuangan || Array.isArray(keuangan)) {
+        keuangan = { saldoAwal: 0, transaksi: [] };
+    }
+    
+    const saldoAwal = keuangan.saldoAwal || 0;
+    const transaksi = keuangan.transaksi || [];
+    
+    let totalPemasukan = 0;
+    let totalPengeluaran = 0;
+    
+    transaksi.forEach(t => {
+        if (t.jenis === 'pemasukan') {
+            totalPemasukan += t.jumlah;
+        } else {
+            totalPengeluaran += t.jumlah;
         }
+    });
+    
+    const saldo = saldoAwal + totalPemasukan - totalPengeluaran;
+    
+    summary.innerHTML = `
+        <div class="summary-card pemasukan">
+            <h4><i class="fas fa-arrow-down"></i> Total Pemasukan</h4>
+            <div class="amount">Rp ${formatNumber(totalPemasukan)}</div>
+        </div>
+        <div class="summary-card pengeluaran">
+            <h4><i class="fas fa-arrow-up"></i> Total Pengeluaran</h4>
+            <div class="amount">Rp ${formatNumber(totalPengeluaran)}</div>
+        </div>
+        <div class="summary-card saldo">
+            <h4><i class="fas fa-wallet"></i> Saldo Saat Ini</h4>
+            <div class="amount">Rp ${formatNumber(saldo)}</div>
+        </div>
+    `;
+    
+    table.innerHTML = transaksi.map(t => `
+        <tr>
+            <td>${formatDate(t.tanggal)}</td>
+            <td>${t.keterangan}</td>
+            <td class="${t.jenis}">${t.jenis === 'pemasukan' ? '+' : '-'} Rp ${formatNumber(t.jumlah)}</td>
+        </tr>
+    `).join('') || '<tr><td colspan="3" style="text-align: center;">Belum ada transaksi.</td></tr>';
+}
         
     function renderZakatPublic() {
     const summary = document.getElementById('zakatSummary');
