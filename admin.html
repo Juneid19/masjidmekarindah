@@ -838,16 +838,73 @@
         
         // RENDER KEUANGAN
         function renderKeuangan() {
-            const keu = masjidData.keuangan || {};
-            const tr = keu.transaksi || [];
-            const sa = keu.saldoAwal || 0;
-            let tp = 0, tk = 0;
-            tr.forEach(t => { if (t.jenis === 'pemasukan') tp += t.jumlah; else tk += t.jumlah; });
-            const saldo = sa + tp - tk;
-            document.getElementById('keuanganStats').innerHTML = `<div class="stat-card"><div class="icon green"><i class="fas fa-arrow-down"></i></div><div class="info"><h4>Rp ${formatNumber(tp)}</h4><p>Pemasukan</p></div></div><div class="stat-card"><div class="icon red"><i class="fas fa-arrow-up"></i></div><div class="info"><h4>Rp ${formatNumber(tk)}</h4><p>Pengeluaran</p></div></div><div class="stat-card"><div class="icon gold"><i class="fas fa-wallet"></i></div><div class="info"><h4>Rp ${formatNumber(saldo)}</h4><p>Saldo</p></div></div>`;
-            document.getElementById('saldoAwal').value = sa;
-            document.getElementById('keuanganTable').innerHTML = tr.map((t, i) => `<tr><td data-label="Tanggal">${formatDate(t.tanggal)}</td><td data-label="Keterangan">${t.keterangan}</td><td data-label="Jenis"><span class="badge ${t.jenis === 'pemasukan' ? 'badge-success' : 'badge-danger'}">${t.jenis}</span></td><td data-label="Jumlah">Rp ${formatNumber(t.jumlah)}</td><td><div class="action-btns"><button class="btn btn-warning btn-sm" onclick="editKeuangan(${i})"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-sm" onclick="deleteKeuangan(${i})"><i class="fas fa-trash"></i></button></div></td></tr>`).join('') || '<tr><td colspan="5">Belum ada transaksi</td></tr>';
+    // Fix struktur jika rusak
+    if (!masjidData.keuangan) {
+        masjidData.keuangan = { saldoAwal: 0, transaksi: [] };
+    }
+    if (Array.isArray(masjidData.keuangan)) {
+        masjidData.keuangan = { saldoAwal: 0, transaksi: [] };
+    }
+    
+    var keu = masjidData.keuangan;
+    var tr = [];
+    if (keu.transaksi) { tr = keu.transaksi; }
+    
+    var sa = 0;
+    if (keu.saldoAwal) { sa = keu.saldoAwal; }
+    
+    var tp = 0;
+    var tk = 0;
+    
+    for (var i = 0; i < tr.length; i++) {
+        var t = tr[i];
+        if (t && t.jenis === 'pemasukan') {
+            tp = tp + (t.jumlah ? t.jumlah : 0);
+        } else if (t) {
+            tk = tk + (t.jumlah ? t.jumlah : 0);
         }
+    }
+    
+    var saldo = sa + tp - tk;
+    
+    var statsEl = document.getElementById('keuanganStats');
+    if (statsEl) {
+        var statsHTML = '';
+        statsHTML = statsHTML + '<div class="stat-card"><div class="icon green"><i class="fas fa-arrow-down"></i></div><div class="info"><h4>Rp ' + formatNumber(tp) + '</h4><p>Pemasukan</p></div></div>';
+        statsHTML = statsHTML + '<div class="stat-card"><div class="icon red"><i class="fas fa-arrow-up"></i></div><div class="info"><h4>Rp ' + formatNumber(tk) + '</h4><p>Pengeluaran</p></div></div>';
+        statsHTML = statsHTML + '<div class="stat-card"><div class="icon gold"><i class="fas fa-wallet"></i></div><div class="info"><h4>Rp ' + formatNumber(saldo) + '</h4><p>Saldo</p></div></div>';
+        statsEl.innerHTML = statsHTML;
+    }
+    
+    var saldoEl = document.getElementById('saldoAwal');
+    if (saldoEl) { saldoEl.value = sa; }
+    
+    var tableEl = document.getElementById('keuanganTable');
+    if (tableEl) {
+        var tableHTML = '';
+        if (tr.length === 0) {
+            tableHTML = '<tr><td colspan="5">Belum ada transaksi</td></tr>';
+        } else {
+            for (var j = 0; j < tr.length; j++) {
+                var row = tr[j];
+                var tgl = formatDate(row.tanggal);
+                var ket = row.keterangan ? row.keterangan : '-';
+                var jns = row.jenis ? row.jenis : 'pemasukan';
+                var jml = row.jumlah ? row.jumlah : 0;
+                var badgeClass = jns === 'pemasukan' ? 'badge-success' : 'badge-danger';
+                
+                tableHTML = tableHTML + '<tr>';
+                tableHTML = tableHTML + '<td data-label="Tanggal">' + tgl + '</td>';
+                tableHTML = tableHTML + '<td data-label="Keterangan">' + ket + '</td>';
+                tableHTML = tableHTML + '<td data-label="Jenis"><span class="badge ' + badgeClass + '">' + jns + '</span></td>';
+                tableHTML = tableHTML + '<td data-label="Jumlah">Rp ' + formatNumber(jml) + '</td>';
+                tableHTML = tableHTML + '<td><div class="action-btns"><button class="btn btn-warning btn-sm" onclick="editKeuangan(' + j + ')"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-sm" onclick="deleteKeuangan(' + j + ')"><i class="fas fa-trash"></i></button></div></td>';
+                tableHTML = tableHTML + '</tr>';
+            }
+        }
+        tableEl.innerHTML = tableHTML;
+    }
+}
         
         function saveSaldoAwal() { 
     if (!masjidData.keuangan) {
