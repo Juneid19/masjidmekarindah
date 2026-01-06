@@ -883,14 +883,66 @@
         function editKeuangan(i) { openKeuanganModal(i); }
         
         function saveKeuangan() {
-            const id = document.getElementById('keuanganId').value;
-            const data = { tanggal: document.getElementById('keuanganTanggal').value, jenis: document.getElementById('keuanganJenis').value, jumlah: parseInt(document.getElementById('keuanganJumlah').value) || 0, keterangan: document.getElementById('keuanganKeterangan').value };
-            if (!data.jumlah) { showNotification('Jumlah wajib diisi!', 'error'); return; }
-            if (!masjidData.keuangan) masjidData.keuangan = { saldoAwal: 0, transaksi: [] };
-            if (!masjidData.keuangan.transaksi) masjidData.keuangan.transaksi = [];
-            if (id !== '') masjidData.keuangan.transaksi[parseInt(id)] = data; else masjidData.keuangan.transaksi.unshift(data);
-            closeModal('modalKeuangan'); saveData(); renderKeuangan();
-        }
+    var idEl = document.getElementById('keuanganId');
+    var tanggalEl = document.getElementById('keuanganTanggal');
+    var jenisEl = document.getElementById('keuanganJenis');
+    var jumlahEl = document.getElementById('keuanganJumlah');
+    var ketEl = document.getElementById('keuanganKeterangan');
+    
+    var id = '';
+    if (idEl) { id = idEl.value; }
+    
+    var tanggal = '';
+    if (tanggalEl) { tanggal = tanggalEl.value; }
+    
+    var jenis = 'pemasukan';
+    if (jenisEl) { jenis = jenisEl.value; }
+    
+    var jumlah = 0;
+    if (jumlahEl && jumlahEl.value) { 
+        jumlah = parseInt(jumlahEl.value); 
+    }
+    if (isNaN(jumlah)) { jumlah = 0; }
+    
+    var keterangan = '';
+    if (ketEl) { keterangan = ketEl.value; }
+    
+    if (jumlah === 0) { 
+        showNotification('Jumlah wajib diisi!', 'error'); 
+        return; 
+    }
+    
+    var data = { 
+        tanggal: tanggal, 
+        jenis: jenis, 
+        jumlah: jumlah, 
+        keterangan: keterangan 
+    };
+    
+    // Fix struktur keuangan jika rusak
+    if (!masjidData.keuangan) {
+        masjidData.keuangan = { saldoAwal: 0, transaksi: [] };
+    }
+    if (Array.isArray(masjidData.keuangan)) {
+        masjidData.keuangan = { saldoAwal: 0, transaksi: [] };
+    }
+    if (!masjidData.keuangan.transaksi) {
+        masjidData.keuangan.transaksi = [];
+    }
+    if (!masjidData.keuangan.saldoAwal) {
+        masjidData.keuangan.saldoAwal = 0;
+    }
+    
+    if (id !== '' && id !== null && id !== undefined) {
+        masjidData.keuangan.transaksi[parseInt(id)] = data;
+    } else {
+        masjidData.keuangan.transaksi.unshift(data);
+    }
+    
+    closeModal('modalKeuangan'); 
+    saveData(); 
+    renderKeuangan();
+}
         
         function deleteKeuangan(i) { if (confirm('Hapus transaksi ini?')) { masjidData.keuangan.transaksi.splice(i, 1); saveData(); renderKeuangan(); } }
         
