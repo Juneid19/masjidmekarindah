@@ -849,7 +849,28 @@
             document.getElementById('keuanganTable').innerHTML = tr.map((t, i) => `<tr><td data-label="Tanggal">${formatDate(t.tanggal)}</td><td data-label="Keterangan">${t.keterangan}</td><td data-label="Jenis"><span class="badge ${t.jenis === 'pemasukan' ? 'badge-success' : 'badge-danger'}">${t.jenis}</span></td><td data-label="Jumlah">Rp ${formatNumber(t.jumlah)}</td><td><div class="action-btns"><button class="btn btn-warning btn-sm" onclick="editKeuangan(${i})"><i class="fas fa-edit"></i></button><button class="btn btn-danger btn-sm" onclick="deleteKeuangan(${i})"><i class="fas fa-trash"></i></button></div></td></tr>`).join('') || '<tr><td colspan="5">Belum ada transaksi</td></tr>';
         }
         
-        function saveSaldoAwal() { if (!masjidData.keuangan) masjidData.keuangan = {}; masjidData.keuangan.saldoAwal = parseInt(document.getElementById('saldoAwal').value) || 0; saveData(); renderKeuangan(); }
+        function saveSaldoAwal() { 
+    if (!masjidData.keuangan) {
+        masjidData.keuangan = { saldoAwal: 0, transaksi: [] };
+    }
+    if (Array.isArray(masjidData.keuangan)) {
+        masjidData.keuangan = { saldoAwal: 0, transaksi: [] };
+    }
+    if (!masjidData.keuangan.transaksi) {
+        masjidData.keuangan.transaksi = [];
+    }
+    var saldoInput = document.getElementById('saldoAwal');
+    var saldoValue = 0;
+    if (saldoInput && saldoInput.value) {
+        saldoValue = parseInt(saldoInput.value);
+    }
+    if (isNaN(saldoValue)) {
+        saldoValue = 0;
+    }
+    masjidData.keuangan.saldoAwal = saldoValue;
+    saveData(); 
+    renderKeuangan(); 
+}
         
         function openKeuanganModal(i = null) {
             document.getElementById('modalKeuanganTitle').textContent = i !== null ? 'Edit Transaksi' : 'Tambah Transaksi';
