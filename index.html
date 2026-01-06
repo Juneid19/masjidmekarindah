@@ -761,44 +761,197 @@
             color: var(--white);
         }
         
-        /* Galeri */
-        .galeri-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        
-        .galeri-item {
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            background: var(--white);
-        }
-        
-        .galeri-item img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            transition: transform 0.3s;
-        }
-        
-        .galeri-item:hover img {
-            transform: scale(1.05);
-        }
-        
-        .galeri-item iframe {
-            width: 100%;
-            height: 220px;
-            border: none;
-        }
-        
-        .galeri-item .caption {
-            padding: 15px;
-            text-align: center;
-            color: var(--gray);
-            font-size: 0.9rem;
-        }
-        
+        /* ==================== GALERI SLIDESHOW ==================== */
+.galeri-slider {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+}
+
+.galeri-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.galeri-slide {
+    min-width: 100%;
+    position: relative;
+}
+
+.galeri-slide img {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+    display: block;
+}
+
+.galeri-slide iframe {
+    width: 100%;
+    height: 450px;
+    border: none;
+    display: block;
+}
+
+.galeri-slide .caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    color: white;
+    padding: 30px 20px 20px;
+    text-align: center;
+    font-size: 1rem;
+}
+
+/* Navigation Arrows */
+.galeri-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.9);
+    color: var(--primary);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.3s;
+    z-index: 10;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+}
+
+.galeri-nav:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.galeri-nav.prev { left: 15px; }
+.galeri-nav.next { right: 15px; }
+
+/* Dots Indicator */
+.galeri-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.galeri-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ccc;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.galeri-dot.active {
+    background: var(--primary);
+    transform: scale(1.2);
+}
+
+/* Thumbnails */
+.galeri-thumbs {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    overflow-x: auto;
+    padding: 10px 0;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.galeri-thumb {
+    width: 80px;
+    height: 60px;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: all 0.3s;
+    border: 3px solid transparent;
+    flex-shrink: 0;
+}
+
+.galeri-thumb.active {
+    opacity: 1;
+    border-color: var(--primary);
+}
+
+.galeri-thumb:hover {
+    opacity: 1;
+}
+
+.galeri-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Auto-play indicator */
+.galeri-autoplay {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.galeri-autoplay button {
+    background: var(--light);
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    padding: 8px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.galeri-autoplay button:hover,
+.galeri-autoplay button.playing {
+    background: var(--primary);
+    color: white;
+}
+
+/* Empty state */
+.galeri-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--gray);
+}
+
+.galeri-empty i {
+    font-size: 4rem;
+    color: #ddd;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+    .galeri-slide img,
+    .galeri-slide iframe {
+        height: 280px;
+    }
+    
+    .galeri-nav {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .galeri-nav.prev { left: 10px; }
+    .galeri-nav.next { right: 10px; }
+    
+    .galeri-thumb {
+        width: 60px;
+        height: 45px;
+    }
+}        
         /* Pengumuman */
         .pengumuman-list {
             display: flex;
@@ -1285,15 +1438,16 @@
     </section>
 
     <!-- Galeri -->
-    <section id="galeri" style="background: white;">
-        <div class="section-title">
-            <h2><i class="fas fa-images"></i> Galeri Kegiatan</h2>
-            <p>Dokumentasi kegiatan Masjid Mekarindah</p>
-        </div>
-        <div class="galeri-grid" id="galeriGrid">
-            <!-- Konten akan dimuat via JavaScript -->
-        </div>
-    </section>
+<section id="galeri" style="background: white;">
+    <div class="section-title">
+        <h2><i class="fas fa-images"></i> Galeri Kegiatan</h2>
+        <p>Dokumentasi kegiatan Masjid Mekarindah</p>
+    </div>
+    
+    <div id="galeriContainer">
+        <!-- Galeri akan dimuat via JavaScript -->
+    </div>
+</section>
 
     <!-- Pengumuman -->
     <section id="pengumuman">
@@ -1759,30 +1913,154 @@
             });
         }
         
-        function renderGaleri() {
-            const grid = document.getElementById('galeriGrid');
-            if (!grid) return;
-            
-            const galeri = masjidData.galeri || [];
-            
-            grid.innerHTML = galeri.map(g => {
-                if (g.tipe === 'video' && g.youtubeId) {
-                    return `
-                        <div class="galeri-item">
-                            <iframe src="https://www.youtube.com/embed/${g.youtubeId}" allowfullscreen></iframe>
-                            <div class="caption">${g.caption || ''}</div>
-                        </div>
-                    `;
-                } else {
-                    return `
-                        <div class="galeri-item">
-                            <img src="${g.url || 'https://via.placeholder.com/300x220'}" alt="${g.caption || ''}">
-                            <div class="caption">${g.caption || ''}</div>
-                        </div>
-                    `;
-                }
-            }).join('') || '<p style="text-align: center; color: var(--gray); grid-column: 1/-1;">Belum ada foto/video di galeri.</p>';
+        // ==================== GALERI SLIDESHOW ====================
+let galeriIndex = 0;
+let galeriInterval = null;
+let galeriAutoplay = true;
+
+function renderGaleri() {
+    const container = document.getElementById('galeriContainer');
+    if (!container) return;
+    
+    const galeri = masjidData.galeri || [];
+    
+    if (galeri.length === 0) {
+        container.innerHTML = `
+            <div class="galeri-empty">
+                <i class="fas fa-images"></i>
+                <p>Belum ada foto/video di galeri</p>
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = `
+        <div class="galeri-slider">
+            <div class="galeri-track" id="galeriTrack">
+                ${galeri.map((g, i) => {
+                    if (g.tipe === 'video' && g.youtubeId) {
+                        return `
+                            <div class="galeri-slide" data-index="${i}">
+                                <iframe src="https://www.youtube.com/embed/${g.youtubeId}" allowfullscreen></iframe>
+                                ${g.caption ? `<div class="caption"><i class="fab fa-youtube"></i> ${g.caption}</div>` : ''}
+                            </div>
+                        `;
+                    } else {
+                        return `
+                            <div class="galeri-slide" data-index="${i}">
+                                <img src="${g.url || 'https://via.placeholder.com/900x450'}" alt="${g.caption || 'Galeri'}">
+                                ${g.caption ? `<div class="caption">${g.caption}</div>` : ''}
+                            </div>
+                        `;
+                    }
+                }).join('')}
+            </div>
+            <button class="galeri-nav prev" onclick="moveGaleri(-1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="galeri-nav next" onclick="moveGaleri(1)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+        
+        <div class="galeri-dots" id="galeriDots">
+            ${galeri.map((_, i) => `
+                <button class="galeri-dot ${i === 0 ? 'active' : ''}" onclick="goToGaleri(${i})"></button>
+            `).join('')}
+        </div>
+        
+        <div class="galeri-thumbs" id="galeriThumbs">
+            ${galeri.map((g, i) => {
+                const thumbSrc = g.tipe === 'video' 
+                    ? `https://img.youtube.com/vi/${g.youtubeId}/0.jpg`
+                    : (g.url || 'https://via.placeholder.com/80x60');
+                return `
+                    <div class="galeri-thumb ${i === 0 ? 'active' : ''}" onclick="goToGaleri(${i})">
+                        <img src="${thumbSrc}" alt="Thumbnail">
+                    </div>
+                `;
+            }).join('')}
+        </div>
+        
+        <div class="galeri-autoplay">
+            <button onclick="toggleAutoplay()" id="autoplayBtn" class="playing">
+                <i class="fas fa-pause"></i> Auto Play
+            </button>
+        </div>
+    `;
+    
+    // Start autoplay
+    startGaleriAutoplay();
+}
+
+function moveGaleri(direction) {
+    const galeri = masjidData.galeri || [];
+    if (galeri.length === 0) return;
+    
+    galeriIndex += direction;
+    
+    if (galeriIndex < 0) galeriIndex = galeri.length - 1;
+    if (galeriIndex >= galeri.length) galeriIndex = 0;
+    
+    updateGaleriPosition();
+    resetAutoplayTimer();
+}
+
+function goToGaleri(index) {
+    galeriIndex = index;
+    updateGaleriPosition();
+    resetAutoplayTimer();
+}
+
+function updateGaleriPosition() {
+    const track = document.getElementById('galeriTrack');
+    if (track) {
+        track.style.transform = `translateX(-${galeriIndex * 100}%)`;
+    }
+    
+    // Update dots
+    document.querySelectorAll('.galeri-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === galeriIndex);
+    });
+    
+    // Update thumbnails
+    document.querySelectorAll('.galeri-thumb').forEach((thumb, i) => {
+        thumb.classList.toggle('active', i === galeriIndex);
+    });
+}
+
+function startGaleriAutoplay() {
+    if (galeriInterval) clearInterval(galeriInterval);
+    if (galeriAutoplay) {
+        galeriInterval = setInterval(() => {
+            moveGaleri(1);
+        }, 4000); // Ganti setiap 4 detik
+    }
+}
+
+function resetAutoplayTimer() {
+    if (galeriAutoplay) {
+        startGaleriAutoplay();
+    }
+}
+
+function toggleAutoplay() {
+    galeriAutoplay = !galeriAutoplay;
+    const btn = document.getElementById('autoplayBtn');
+    
+    if (galeriAutoplay) {
+        btn.innerHTML = '<i class="fas fa-pause"></i> Auto Play';
+        btn.classList.add('playing');
+        startGaleriAutoplay();
+    } else {
+        btn.innerHTML = '<i class="fas fa-play"></i> Auto Play';
+        btn.classList.remove('playing');
+        if (galeriInterval) {
+            clearInterval(galeriInterval);
+            galeriInterval = null;
         }
+    }
+}
         
         function renderPengumuman() {
             const list = document.getElementById('pengumumanList');
