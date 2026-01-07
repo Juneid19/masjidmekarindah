@@ -983,6 +983,96 @@
         width: 60px;
         height: 45px;
     }
+
+    /* Video Wrapper */
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    height: 450px;
+}
+
+.video-overlay {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.video-overlay img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.video-overlay .play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 0, 0, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    transition: all 0.3s;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+.video-overlay:hover .play-button {
+    background: #ff0000;
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.video-container {
+    width: 100%;
+    height: 100%;
+}
+
+.video-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Thumbnail play icon */
+.galeri-thumb {
+    position: relative;
+}
+
+.thumb-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 25px;
+    height: 25px;
+    background: rgba(255, 0, 0, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.6rem;
+}
+
+@media (max-width: 768px) {
+    .video-wrapper {
+        height: 280px;
+    }
+    
+    .video-overlay .play-button {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+        
 }
         
         /* Pengumuman */
@@ -2124,49 +2214,231 @@ function moveGaleri(direction) {
     if (galeri.length === 0) return;
     
     galeriIndex += direction;
+// ==================== GALERI SLIDESHOW ====================
+var galeriIndex = 0;
+var galeriInterval = null;
+var galeriAutoplay = true;
+var videoPlaying = false;
+
+function renderGaleri() {
+    var container = document.getElementById('galeriContainer');
+    if (!container) return;
     
-    if (galeriIndex < 0) galeriIndex = galeri.length - 1;
-    if (galeriIndex >= galeri.length) galeriIndex = 0;
+    var galeri = [];
+    if (masjidData.galeri) {
+        galeri = masjidData.galeri;
+    }
+    
+    if (galeri.length === 0) {
+        container.innerHTML = '<div class="galeri-empty"><i class="fas fa-images"></i><p>Belum ada foto/video di galeri</p></div>';
+        return;
+    }
+    
+    var slidesHTML = '';
+    var dotsHTML = '';
+    var thumbsHTML = '';
+    
+    for (var i = 0; i < galeri.length; i++) {
+        var g = galeri[i];
+        
+        if (g.tipe === 'video' && g.youtubeId) {
+            // Video slide - dengan overlay untuk klik
+            slidesHTML = slidesHTML + '<div class="galeri-slide" data-index="' + i + '" data-type="video">';
+            slidesHTML = slidesHTML + '<div class="video-wrapper" id="videoWrapper' + i + '">';
+            slidesHTML = slidesHTML + '<div class="video-overlay" onclick="playVideo(' + i + ', \'' + g.youtubeId + '\')">';
+            slidesHTML = slidesHTML + '<img src="https://img.youtube.com/vi/' + g.youtubeId + '/maxresdefault.jpg" onerror="this.src=\'https://img.youtube.com/vi/' + g.youtubeId + '/hqdefault.jpg\'" alt="Video">';
+            slidesHTML = slidesHTML + '<div class="play-button"><i class="fas fa-play"></i></div>';
+            slidesHTML = slidesHTML + '</div>';
+            slidesHTML = slidesHTML + '<div class="video-container" id="videoContainer' + i + '" style="display:none;"></div>';
+            slidesHTML = slidesHTML + '</div>';
+            if (g.caption) {
+                slidesHTML = slidesHTML + '<div class="caption"><i class="fab fa-youtube"></i> ' + g.caption + '</div>';
+            }
+            slidesHTML = slidesHTML + '</div>';
+            
+            // Thumbnail video
+            thumbsHTML = thumbsHTML + '<div class="galeri-thumb ' + (i === 0 ? 'active' : '') + '" onclick="goToGaleri(' + i + ')">';
+            thumbsHTML = thumbsHTML + '<img src="https://img.youtube.com/vi/' + g.youtubeId + '/0.jpg" alt="Thumbnail">';
+            thumbsHTML = thumbsHTML + '<div class="thumb-play"><i class="fas fa-play"></i></div>';
+            thumbsHTML = thumbsHTML + '</div>';
+        } else {
+            // Foto slide
+            var imgUrl = g.url ? g.url : 'https://via.placeholder.com/900x450';
+            var imgAlt = g.caption ? g.caption : 'Galeri';
+            
+            slidesHTML = slidesHTML + '<div class="galeri-slide" data-index="' + i + '" data-type="foto">';
+            slidesHTML = slidesHTML + '<img src="' + imgUrl + '" alt="' + imgAlt + '">';
+            if (g.caption) {
+                slidesHTML = slidesHTML + '<div class="caption">' + g.caption + '</div>';
+            }
+            slidesHTML = slidesHTML + '</div>';
+            
+            // Thumbnail foto
+            thumbsHTML = thumbsHTML + '<div class="galeri-thumb ' + (i === 0 ? 'active' : '') + '" onclick="goToGaleri(' + i + ')">';
+            thumbsHTML = thumbsHTML + '<img src="' + imgUrl + '" alt="Thumbnail">';
+            thumbsHTML = thumbsHTML + '</div>';
+        }
+        
+        // Dots
+        dotsHTML = dotsHTML + '<button class="galeri-dot ' + (i === 0 ? 'active' : '') + '" onclick="goToGaleri(' + i + ')"></button>';
+    }
+    
+    var html = '';
+    html = html + '<div class="galeri-slider">';
+    html = html + '<div class="galeri-track" id="galeriTrack">' + slidesHTML + '</div>';
+    html = html + '<button class="galeri-nav prev" onclick="moveGaleri(-1)"><i class="fas fa-chevron-left"></i></button>';
+    html = html + '<button class="galeri-nav next" onclick="moveGaleri(1)"><i class="fas fa-chevron-right"></i></button>';
+    html = html + '</div>';
+    html = html + '<div class="galeri-dots" id="galeriDots">' + dotsHTML + '</div>';
+    html = html + '<div class="galeri-thumbs" id="galeriThumbs">' + thumbsHTML + '</div>';
+    
+    container.innerHTML = html;
+    
+    // Start autoplay
+    startGaleriAutoplay();
+}
+
+function playVideo(index, youtubeId) {
+    // Stop autoplay
+    stopGaleriAutoplay();
+    videoPlaying = true;
+    
+    // Hide overlay, show video
+    var wrapper = document.getElementById('videoWrapper' + index);
+    if (wrapper) {
+        var overlay = wrapper.querySelector('.video-overlay');
+        var container = document.getElementById('videoContainer' + index);
+        
+        if (overlay) {
+            overlay.style.display = 'none';
+        }
+        
+        if (container) {
+            container.style.display = 'block';
+            container.innerHTML = '<iframe src="https://www.youtube.com/embed/' + youtubeId + '?autoplay=1&rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+        }
+    }
+}
+
+function stopVideo(index) {
+    var wrapper = document.getElementById('videoWrapper' + index);
+    if (wrapper) {
+        var overlay = wrapper.querySelector('.video-overlay');
+        var container = document.getElementById('videoContainer' + index);
+        
+        if (overlay) {
+            overlay.style.display = 'flex';
+        }
+        
+        if (container) {
+            container.style.display = 'none';
+            container.innerHTML = '';
+        }
+    }
+    
+    videoPlaying = false;
+}
+
+function stopAllVideos() {
+    var galeri = [];
+    if (masjidData.galeri) {
+        galeri = masjidData.galeri;
+    }
+    
+    for (var i = 0; i < galeri.length; i++) {
+        stopVideo(i);
+    }
+    
+    videoPlaying = false;
+}
+
+function moveGaleri(direction) {
+    var galeri = [];
+    if (masjidData.galeri) {
+        galeri = masjidData.galeri;
+    }
+    if (galeri.length === 0) return;
+    
+    // Stop any playing video
+    stopAllVideos();
+    
+    galeriIndex = galeriIndex + direction;
+    
+    if (galeriIndex < 0) {
+        galeriIndex = galeri.length - 1;
+    }
+    if (galeriIndex >= galeri.length) {
+        galeriIndex = 0;
+    }
     
     updateGaleriPosition();
-    resetAutoplayTimer();
+    
+    // Restart autoplay jika tidak ada video yang diputar
+    if (!videoPlaying) {
+        startGaleriAutoplay();
+    }
 }
 
 function goToGaleri(index) {
+    // Stop any playing video
+    stopAllVideos();
+    
     galeriIndex = index;
     updateGaleriPosition();
-    resetAutoplayTimer();
+    
+    // Restart autoplay
+    startGaleriAutoplay();
 }
 
 function updateGaleriPosition() {
-    const track = document.getElementById('galeriTrack');
+    var track = document.getElementById('galeriTrack');
     if (track) {
-        track.style.transform = `translateX(-${galeriIndex * 100}%)`;
+        track.style.transform = 'translateX(-' + (galeriIndex * 100) + '%)';
     }
     
     // Update dots
-    document.querySelectorAll('.galeri-dot').forEach((dot, i) => {
-        dot.classList.toggle('active', i === galeriIndex);
-    });
+    var dots = document.querySelectorAll('.galeri-dot');
+    for (var i = 0; i < dots.length; i++) {
+        if (i === galeriIndex) {
+            dots[i].classList.add('active');
+        } else {
+            dots[i].classList.remove('active');
+        }
+    }
     
     // Update thumbnails
-    document.querySelectorAll('.galeri-thumb').forEach((thumb, i) => {
-        thumb.classList.toggle('active', i === galeriIndex);
-    });
-}
-
-function startGaleriAutoplay() {
-    if (galeriInterval) clearInterval(galeriInterval);
-    if (galeriAutoplay) {
-        galeriInterval = setInterval(() => {
-            moveGaleri(1);
-        }, 4000); // Ganti setiap 4 detik
+    var thumbs = document.querySelectorAll('.galeri-thumb');
+    for (var j = 0; j < thumbs.length; j++) {
+        if (j === galeriIndex) {
+            thumbs[j].classList.add('active');
+        } else {
+            thumbs[j].classList.remove('active');
+        }
     }
 }
 
-function resetAutoplayTimer() {
-    if (galeriAutoplay) {
-        startGaleriAutoplay();
+function startGaleriAutoplay() {
+    // Clear existing interval
+    if (galeriInterval) {
+        clearInterval(galeriInterval);
+        galeriInterval = null;
+    }
+    
+    // Only start if no video is playing
+    if (!videoPlaying) {
+        galeriInterval = setInterval(function() {
+            // Check if current slide is video and playing
+            if (!videoPlaying) {
+                moveGaleri(1);
+            }
+        }, 4000);
+    }
+}
+
+function stopGaleriAutoplay() {
+    if (galeriInterval) {
+        clearInterval(galeriInterval);
+        galeriInterval = null;
     }
 }
      
