@@ -740,6 +740,54 @@
             margin-bottom: 15px;
         }
         
+        /* Donasi Info */
+.donasi-info {
+    max-width: 800px;
+    margin: 0 auto 40px;
+    text-align: center;
+}
+
+.donasi-desc {
+    color: var(--gray);
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 25px;
+}
+
+.donasi-ayat {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    padding: 25px 30px;
+    border-radius: 15px;
+    color: var(--white);
+}
+
+.donasi-ayat .ayat-text {
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    margin-bottom: 10px;
+}
+
+.donasi-ayat .ayat-source {
+    color: var(--gold);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+    .donasi-info {
+        padding: 0 15px;
+    }
+    
+    .donasi-ayat {
+        padding: 20px;
+    }
+    
+    .donasi-ayat .ayat-text {
+        font-size: 0.95rem;
+    }
+        }
+        
         .btn-salin {
             background: var(--gold);
             color: var(--dark);
