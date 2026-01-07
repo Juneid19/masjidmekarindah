@@ -556,7 +556,13 @@
                 <input type="hidden" id="galeriId">
                 <div class="form-group"><label>Tipe</label><select id="galeriTipe" onchange="toggleGaleriInput()"><option value="foto">Foto</option><option value="video">Video YouTube</option></select></div>
                 <div class="form-group" id="galeriUrlGroup"><label>URL Foto</label><input type="url" id="galeriUrl"></div>
-                <div class="form-group" id="galeriYoutubeGroup" style="display:none;"><label>YouTube ID</label><input type="text" id="galeriYoutubeId" placeholder="dQw4w9WgXcQ"></div>
+                <div class="form-group" id="galeriYoutubeGroup" style="display:none;">
+    <label>Link YouTube (semua format)</label>
+    <input type="text" id="galeriYoutubeId" placeholder="Paste link YouTube apapun">
+    <small style="color: #666; display: block; margin-top: 5px;">
+        Contoh: youtube.com/watch?v=xxx, youtu.be/xxx, youtube.com/shorts/xxx
+    </small>
+</div>
                 <div class="form-group"><label>Caption</label><input type="text" id="galeriCaption"></div>
             </div>
             <div class="modal-footer">
@@ -734,7 +740,7 @@
         function renderDashboard() {
             const s = document.getElementById('statsGrid');
             const pc = (masjidData.pengurus || []).length;
-            const gc = (masjidData.galeri || []).length;
+            const gc =  (masjidData.galeri || []).length;
             const ac = (masjidData.pengumuman || []).length;
             const kc = (masjidData.kisahInspiratif || []).length;
             const keu = masjidData.keuangan || {};
@@ -1123,16 +1129,115 @@
         
         function editGaleri(i) { openGaleriModal(i); }
         
-        function saveGaleri() {
-            const id = document.getElementById('galeriId').value;
-            const tipe = document.getElementById('galeriTipe').value;
-            const data = { tipe: tipe, caption: document.getElementById('galeriCaption').value };
-            if (tipe === 'foto') { data.url = document.getElementById('galeriUrl').value; if (!data.url) { showNotification('URL foto wajib diisi!', 'error'); return; } }
-            else { data.youtubeId = document.getElementById('galeriYoutubeId').value; if (!data.youtubeId) { showNotification('YouTube ID wajib diisi!', 'error'); return; } }
-            if (!masjidData.galeri) masjidData.galeri = [];
-            if (id !== '') masjidData.galeri[parseInt(id)] = data; else masjidData.galeri.push(data);
-            closeModal('modalGaleri'); saveData(); renderGaleri();
+        function extractYoutubeId(url) {
+    if (!url) return '';
+    
+    // Kalau sudah berupa ID saja (11 karakter tanpa slash/titik)
+    if (url.length === 11 && !url.includes('/') && !url.includes('.')) {
+        return url;
+    }
+    
+    var videoId = '';
+    
+    // Format: youtube.com/watch?v=VIDEO_ID
+    if (url.includes('watch?v=')) {
+        var parts = url.split('watch?v=');
+        if (parts[1]) {
+            videoId = parts[1].split('&')[0];
         }
+    }
+    // Format: youtu.be/VIDEO_ID
+    else if (url.includes('youtu.be/')) {
+        var parts = url.split('youtu.be/');
+        if (parts[1]) {
+            videoId = parts[1].split('?')[0];
+        }
+    }
+    // Format: youtube.com/embed/VIDEO_ID
+    else if (url.includes('/embed/')) {
+        var parts = url.split('/embed/');
+        if (parts[1]) {
+            videoId = parts[1].split('?')[0];
+        }
+    }
+    // Format: youtube.com/shorts/VIDEO_ID
+    else if (url.includes('/shorts/')) {
+        var parts = url.split('/shorts/');
+        if (parts[1]) {
+            videoId = parts[1].split('?')[0];
+        }
+    }
+    // Format: youtube.com/live/VIDEO_ID
+    else if (url.includes('/live/')) {
+        var parts = url.split('/live/');
+        if (parts[1]) {
+            videoId = parts[1].split('?')[0];
+        }
+    }
+    // Format: youtube.com/v/VIDEO_ID
+    else if (url.includes('/v/')) {
+        var parts = url.split('/v/');
+        if (parts[1]) {
+            videoId = parts[1].split('?')[0];
+        }
+    }
+    
+    return videoId;
+}
+
+function saveGaleri() {
+    var idEl = document.getElementById('galeriId');
+    var tipeEl = document.getElementById('galeriTipe');
+    var urlEl = document.getElementById('galeriUrl');
+    var youtubeEl = document.getElementById('galeriYoutubeId');
+    var captionEl = document.getElementById('galeriCaption');
+    
+    var id = '';
+    if (idEl) { id = idEl.value; }
+    
+    var tipe = 'foto';
+    if (tipeEl) { tipe = tipeEl.value; }
+    
+    var caption = '';
+    if (captionEl) { caption = captionEl.value; }
+    
+    var data = { tipe: tipe, caption: caption };
+    
+    if (tipe === 'foto') { 
+        var url = '';
+        if (urlEl) { url = urlEl.value; }
+        
+        if (!url) { 
+            showNotification('URL foto wajib diisi!', 'error'); 
+            return; 
+        }
+        data.url = url;
+    } else { 
+        var youtubeInput = '';
+        if (youtubeEl) { youtubeInput = youtubeEl.value; }
+        
+        // Extract YouTube ID dari berbagai format URL
+        var youtubeId = extractYoutubeId(youtubeInput);
+        
+        if (!youtubeId) { 
+            showNotification('Link YouTube tidak valid!', 'error'); 
+            return; 
+        }
+        data.youtubeId = youtubeId;
+    }
+    
+    if (!masjidData.galeri) { masjidData.galeri = []; }
+    
+    if (id !== '' && id !== null && id !== undefined) {
+        masjidData.galeri[parseInt(id)] = data;
+    } else {
+        masjidData.galeri.push(data);
+    }
+    
+    closeModal('modalGaleri'); 
+    saveData(); 
+    renderGaleri();
+}
         
         function deleteGaleri(i) { if (confirm('Hapus item ini?')) { masjidData.galeri.splice(i, 1); saveData(); renderGaleri(); } }
         
