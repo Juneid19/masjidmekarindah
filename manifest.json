@@ -1,0 +1,67 @@
+{
+  "name": "Masjid Jami' Mekarindah",
+  "short_name": "Masjid Mekarindah",
+  "description": "Website Resmi Masjid Jami' Mekarindah - Cikarang Baru, Jawa Barat",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d7a3a",
+  "theme_color": "#0d7a3a",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "id",
+  "categories": ["lifestyle", "education", "religion"],
+  "icons": [
+    {
+      "src": "/icons/android-launchericon-48-48.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/android-launchericon-72-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/android-launchericon-96-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/android-launchericon-144-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/android-launchericon-192-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/android-launchericon-512-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Jadwal Sholat",
+      "short_name": "Sholat",
+      "description": "Lihat jadwal waktu sholat",
+      "url": "/#jadwal-sholat",
+      "icons": [{ "src": "/icons/android-launchericon-96-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Donasi",
+      "short_name": "Donasi",
+      "description": "Donasi untuk masjid",
+      "url": "/#donasi",
+      "icons": [{ "src": "/icons/android-launchericon-96-96.png", "sizes": "96x96" }]
+    }
+  ]
+    }
