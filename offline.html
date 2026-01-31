@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - Masjid Mekarindah</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #0d7a3a, #095c2b);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+        .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        h1 { font-size: 1.8rem; margin-bottom: 15px; }
+        p { opacity: 0.9; margin-bottom: 30px; max-width: 300px; }
+        button {
+            background: #d4af37;
+            color: #1a1a2e;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        button:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body>
+    <div class="icon">📶</div>
+    <h1>Tidak Ada Koneksi</h1>
+    <p>Periksa koneksi internet Anda dan coba lagi.</p>
+    <button onclick="location.reload()">Coba Lagi</button>
+</body>
+</html>
