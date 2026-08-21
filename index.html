@@ -1726,22 +1726,17 @@
         }
 
         // ==================== DATA LOADING ====================
-               async function loadData() {
+                       // ==================== DATA LOADING ====================
+        async function loadData() {
             try {
+                // Ambil data dari path 'masjidData' di Firebase
                 const snapshot = await database.ref('masjidData').get();
                 const result = snapshot.val() || {};
-                DATA = result;   // <-- Ganti dari siteData jadi DATA
-                setCache(DATA);  // <-- Pastikan pakai DATA
+                
+                DATA = result;
+                setCache(DATA);
                 renderAll();
-                    refreshDataInBackground();
-                    return;
-                }
-
-                const snapshot = await database.ref('masjidData').get();
-                const result = snapshot.val() || {};
-                DATA = result;   // <-- Ganti dari siteData jadi DATA
-                setCache(DATA);  // <-- Pastikan pakai DATA
-                renderAll();
+                refreshDataInBackground();
             } catch (error) {
                 console.error('Error loading data:', error);
                 loadDefaultData();
