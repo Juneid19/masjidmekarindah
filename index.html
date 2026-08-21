@@ -1743,11 +1743,11 @@
             }
         }
 
-        async function refreshDataInBackground() {
+         async function refreshDataInBackground() {
             try {
                 const snapshot = await database.ref('masjidData').get();
-const result = snapshot.val() || {};
-siteData = { ...siteData, ...result };
+                const result = snapshot.val() || {};
+                DATA = { ...DATA, ...result };  // <-- Udah diganti jadi DATA
                 setCache(DATA);
             } catch (e) {
                 console.log('Background refresh failed:', e);
