@@ -32,7 +32,8 @@
     <!-- Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://api.jsonbin.io">
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <link rel="preconnect" href="https://api.aladhan.com">
     
     <!-- Fonts -->
@@ -1667,16 +1668,29 @@
     </div>
 
     <script>
-        // ==================== CONFIG ====================
+               // ==================== CONFIG ====================
         const CONFIG = {
-            BIN_ID: '696382b6d0ea881f4063d4d7',
-            API_KEY: '$2a$10$amElu/7hqB7QAfAipp.qtOYQd1BhrP82EfsNbB4jS.0EKexF6Z/t.',
+            // --- Firebase Settings ---
+            apiKey: "AIzaSyCbggRqH4WL0H60SoY0deQ7lv_6i1B3tjo",
+            authDomain: "masjidmekarindah-b3f1a.firebaseapp.com",
+            databaseURL: "https://masjidmekarindah-b3f1a-default-rtdb.firebaseio.com", // <-- Wajib ada ini!
+            projectId: "masjidmekarindah-b3f1a",
+            storageBucket: "masjidmekarindah-b3f1a.firebasestorage.app",
+            messagingSenderId: "372313642338",
+            appId: "1:372313642338:web:96669c446b3cc7e2dc483b",
+            measurementId: "G-T97F51Z31W",
+
+            // --- App Settings (Jangan dihapus) ---
             CACHE_KEY: 'masjidmekarindah_data',
             CACHE_DURATION: 5 * 60 * 1000,
             LATITUDE: -6.303273,
             LONGITUDE: 107.167014,
             ALAMAT: 'Jalan Puspita II No.1 Mekarindah, Cikarang Baru'
         };
+
+        // Inisialisasi Firebase (versi Compat)
+        firebase.initializeApp(CONFIG);
+        const database = firebase.database();
 
         let DATA = null;
         let currentSlide = 0;
@@ -1722,11 +1736,9 @@
                     return;
                 }
 
-                const response = await fetch(`https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}/latest`, {
-                    headers: { 'X-Master-Key': CONFIG.API_KEY }
-                });
-                const result = await response.json();
-                DATA = result.record;
+                const snapshot = await database.ref('masjidData').get();
+const result = snapshot.val() || {};
+siteData = { ...siteData, ...result };
                 setCache(DATA);
                 renderAll();
             } catch (error) {
@@ -1737,11 +1749,9 @@
 
         async function refreshDataInBackground() {
             try {
-                const response = await fetch(`https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}/latest`, {
-                    headers: { 'X-Master-Key': CONFIG.API_KEY }
-                });
-                const result = await response.json();
-                DATA = result.record;
+                const snapshot = await database.ref('masjidData').get();
+const result = snapshot.val() || {};
+siteData = { ...siteData, ...result };
                 setCache(DATA);
             } catch (e) {
                 console.log('Background refresh failed:', e);
