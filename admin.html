@@ -1770,17 +1770,16 @@
         }
 
         // ==================== DATA OPERATIONS ====================
-                        async function loadData() {
+                                async function loadData() {
             showLoading();
             try {
-                // Ambil data lama dari jsonbin
-                const response = await fetch(`https://api.jsonbin.io/v3/b/696382b6d0ea881f4063d4d7/latest`, {
-                    headers: {
-                        'X-Master-Key': '$2a$10$amElu/7hqB7QAfAipp.qtOYQd1BhrP82EfsNbB4jS.0EKexF6Z/t.'
-                    }
-                });
-                const result = await response.json();
-                siteData = { ...siteData, ...result.record };
+                // Ambil data dari path 'masjidData' di Firebase
+                const snapshot = await database.ref('masjidData').get();
+                
+                if (snapshot.exists()) {
+                    const result = snapshot.val();
+                    siteData = { ...siteData, ...result };
+                }
                 renderAll();
             } catch (error) {
                 console.error('Error loading data:', error);
