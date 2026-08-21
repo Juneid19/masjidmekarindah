@@ -1726,7 +1726,7 @@
         }
 
         // ==================== DATA LOADING ====================
-                async function loadData() {
+               async function loadData() {
             try {
                 const snapshot = await database.ref('masjidData').get();
                 const result = snapshot.val() || {};
@@ -1738,9 +1738,9 @@
                 }
 
                 const snapshot = await database.ref('masjidData').get();
-const result = snapshot.val() || {};
-siteData = { ...siteData, ...result };
-                setCache(DATA);
+                const result = snapshot.val() || {};
+                DATA = result;   // <-- Ganti dari siteData jadi DATA
+                setCache(DATA);  // <-- Pastikan pakai DATA
                 renderAll();
             } catch (error) {
                 console.error('Error loading data:', error);
