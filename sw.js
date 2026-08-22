@@ -1,11 +1,11 @@
 const CACHE_NAME = 'masjid-mekarindah-v1';
-const OFFLINE_URL = '/offline.html';
+const OFFLINE_URL = './offline.html';
 
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/offline.html'
+  './',
+  './index.html',
+  './manifest.json',
+  './offline.html'
 ];
 
 self.addEventListener('install', (event) => {
@@ -32,7 +32,6 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
-
   event.respondWith(
     fetch(event.request)
       .then((response) => {
