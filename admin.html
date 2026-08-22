@@ -1685,15 +1685,31 @@
         <div class="loading-spinner"></div>
         <p>Menyimpan data...</p>
     </div>
+	<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
 
     <script>
         // ==================== CONFIG ====================
-        const CONFIG = {
-            BIN_ID: '696382b6d0ea881f4063d4d7',
-            API_KEY: '$2a$10$amElu/7hqB7QAfAipp.qtOYQd1BhrP82EfsNbB4jS.0EKexF6Z/t.',
+       const CONFIG = {
+            // --- Firebase Settings ---
+            apiKey: "AIzaSyCbggRqH4WL0H60SoY0deQ7lv_6i1B3tjo",
+            authDomain: "masjidmekarindah-b3f1a.firebaseapp.com",
+            databaseURL: "https://masjidmekarindah-b3f1a-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "masjidmekarindah-b3f1a",
+            storageBucket: "masjidmekarindah-b3f1a.firebasestorage.app",
+            messagingSenderId: "372313642338",
+            appId: "1:372313642338:web:96669c446b3cc7e2dc483b",
+            measurementId: "G-T97F51Z31W",
+            
+            // --- Admin Settings ---
             USERNAME: 'admin',
             PASSWORD: 'mekarindah2025'
         };
+
+        // Inisialisasi Firebase
+        firebase.initializeApp(CONFIG);
+        const database = firebase.database();
 
         let siteData = {
             tentang: { deskripsi: '', visi: '', misi: [] },
@@ -1754,22 +1770,16 @@
         }
 
         // ==================== DATA OPERATIONS ====================
-        async function loadData() {
+                                async function loadData() {
             showLoading();
             try {
-                const response = await fetch(`https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}/latest`, {
-                    headers: { 
-                        'X-Master-Key': CONFIG.API_KEY 
-                    }
-                });
+                // Ambil data dari path 'masjidData' di Firebase
+                const snapshot = await database.ref('masjidData').get();
                 
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                if (snapshot.exists()) {
+                    const result = snapshot.val();
+                    siteData = { ...siteData, ...result };
                 }
-                
-                const result = await response.json();
-                siteData = { ...siteData, ...result.record };
                 renderAll();
             } catch (error) {
                 console.error('Error loading data:', error);
@@ -1778,36 +1788,19 @@
             hideLoading();
         }
 
-        async function saveData() {
+                async function saveData() {
             showLoading();
             try {
-                const response = await fetch(`https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': CONFIG.API_KEY
-                    },
-                    body: JSON.stringify(siteData)
-                });
-                
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error('Response error:', errorText);
-                    throw new Error(`HTTP ${response.status}: ${errorText}`);
-                }
-                
-                const result = await response.json();
-                console.log('Save success:', result);
-                showToast('Data berhasil disimpan!');
-                return true;
+                // Simpan data ke path 'masjidData' di Firebase
+                await database.ref('masjidData').set(siteData);
+                showToast('Data berhasil disimpan!', false);
             } catch (error) {
                 console.error('Error saving data:', error);
-                showToast('Gagal menyimpan: ' + error.message, true);
-                return false;
-            } finally {
-                hideLoading();
+                showToast('Gagal menyimpan data: ' + error.message, true);
             }
+            hideLoading();
         }
+        
 
         // ==================== RENDER ALL ====================
         function renderAll() {
