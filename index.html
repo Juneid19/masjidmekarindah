@@ -1819,7 +1819,7 @@
 
     <script>
                 // ==================== HADITS HARIAN ====================
-        const kumpulanHadits = [
+                const kumpulanHadits = [
             "Barangsiapa menempuh jalan untuk menuntut ilmu, maka Allah akan memudahkan baginya jalan menuju surga. (HR. Muslim)",
             "Tidaklah dua orang berkumpul kecuali mereka berdua saling mencintai karena Allah. (HR. Bukhari)",
             "Orang mukmin yang paling sempurna imannya adalah yang paling baik akhlaknya. (HR. Ahmad)",
@@ -1829,7 +1829,6 @@
             "Cukuplah seseorang dikatakan berdusta jika ia menceritakan semua yang ia dengar. (HR. Muslim)"
         ];
 
-        // Pakai window.onload biar nunggu halaman bener-bener selesai loading
         window.onload = function() {
             const el = document.getElementById('haditsText');
             if (el) {
@@ -1838,7 +1837,7 @@
                 el.textContent = kumpulanHadits[index];
             }
         };
-    </script>
+	</script>
 	
         // ==================== RENDER FUNCTIONS ====================
         function renderAll() {
@@ -2888,7 +2887,7 @@
             });
         });
     </script>
-	         <!-- Running Text Hadits -->
+	             <!-- Running Text Hadits -->
     <div class="hadits-ticker">
         <div class="hadits-ticker-label">
             <i class="fas fa-book-quran"></i> One Day One Hadits
