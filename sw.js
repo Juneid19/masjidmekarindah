@@ -4,8 +4,7 @@ const OFFLINE_URL = './offline.html';
 const STATIC_ASSETS = [
   './',
   './index.html',
-  './manifest.json',
-  './offline.html'
+  './manifest.json'
 ];
 
 self.addEventListener('install', (event) => {
@@ -32,6 +31,10 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+  
+  // Abaikan request dari chrome-extension dll
+  if (!event.request.url.startsWith('http')) return;
+
   event.respondWith(
     fetch(event.request)
       .then((response) => {
