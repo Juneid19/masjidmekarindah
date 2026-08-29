@@ -1753,23 +1753,23 @@
             }
         }
 
-        // ==================== DATA LOADING ====================
-                      
+                // ==================== DATA LOADING ====================
         async function loadData() {
+            showLoading();
             try {
-                // Ambil data dari path 'masjidData' di Firebase
                 const snapshot = await database.ref('masjidData').get();
-                const result = snapshot.val() || {};
-                
-                DATA = result;
+                if (snapshot.exists()) {
+                    DATA = snapshot.val();
+                }
                 setCache(DATA);
                 renderAll();
                 refreshDataInBackground();
             } catch (error) {
                 console.error('Error loading data:', error);
                 loadDefaultData();
-             }
-            hideLoading(); // <--- INI WAJIB ADA BIAR LOADING BERHENTI!
+            } finally {
+                hideLoading(); // INI WAJIB ADA BIAR LOADING BERHENTI
+            }
         }
 
          async function refreshDataInBackground() {
@@ -2265,57 +2265,44 @@
             return match ? match[1] : '';
         }
 
-        // === DETEKTOR MEDIA PINTAR ===
-        function getMediaHTML(url, altText = '') {
+              // === DETEKTOR MEDIA PINTAR ===
+        function getMediaHTML(url, altText) {
+            altText = altText || '';
             if (!url) {
-                return `<img src="https://via.placeholder.com/800x500/0d7a3a/ffffff?text=Media" alt="${altText}">`;
+                return '<img src="https://via.placeholder.com/800x500/0d7a3a/ffffff?text=Media" alt="' + altText + '">';
             }
 
-                        // Cek MP4
+            // Cek MP4
             if (url.match(/\.(mp4)(\?|$)/i)) {
-                return `<video controls onclick="event.stopPropagation()" style="width: 100%; height: auto; max-height: 450px; aspect-ratio: 16/9; object-fit: contain; border-radius: 8px; background: #000;">
-                    <source src="${url}" type="video/mp4">Browser tidak mendukung.
-                </video>`;
+                return '<video controls onclick="event.stopPropagation()" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;"><source src="' + url + '" type="video/mp4">Browser tidak mendukung.</video>';
             }
 
             // Cek YouTube
-            const videoId = extractYouTubeId(url);
+            var videoId = extractYouTubeId(url);
             if (videoId) {
-                return `
-                <div onclick="event.stopPropagation(); window.open('${url}', '_blank')" style="position:relative; cursor:pointer; height:100%;">
-                    <img src="https://img.youtube.com/vi/${videoId}/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/${videoId}/hqdefault.jpg'" alt="${altText}" style="width:100%; height:100%; object-fit:cover;">
-                    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:rgba(0,0,0,0.6); color:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px;">
-                        <i class="fas fa-play"></i>
-                    </div>
-                </div>`;
+                return '<div onclick="event.stopPropagation(); window.open(\'' + url + '\', \'_blank\')" style="position:relative; cursor:pointer; height:100%;">' +
+                    '<img src="https://img.youtube.com/vi/' + videoId + '/maxresdefault.jpg" onerror="this.src=\'https://img.youtube.com/vi/' + videoId + '/hqdefault.jpg\'" alt="' + altText + '" style="width:100%; height:100%; object-fit:cover;">' +
+                    '<div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:rgba(0,0,0,0.6); color:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px;"><i class="fas fa-play"></i></div>' +
+                    '</div>';
             }
-			
-			                            // Cek Google Drive
+
+            // Cek Google Drive
             if (url.includes('drive.google.com')) {
-                return `<a href="${url}" target="_blank" onclick="event.stopPropagation()" style="display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%; aspect-ratio:16/9; max-height:450px; background:#1E88E5; color:white; text-decoration:none; border-radius:8px; padding:20px; font-weight:bold; box-sizing:border-box;">
-                    <i class="fab fa-google-drive" style="font-size:2.5rem; margin-bottom:10px;"></i>
-                    <span>Buka Video di Drive</span>
-                </a>`;
+                return '<a href="' + url + '" target="_blank" onclick="event.stopPropagation()" style="display:flex; flex-direction:column; justify-content:center; align-items:center; width:100%; aspect-ratio:16/9; max-height:450px; background:#1E88E5; color:white; text-decoration:none; border-radius:8px; padding:20px; font-weight:bold; box-sizing:border-box;"><i class="fab fa-google-drive" style="font-size:2.5rem; margin-bottom:10px;"></i><span>Buka Video di Drive</span></a>';
             }
 
             // Cek Instagram
             if (url.includes('instagram.com')) {
-                return `<a href="${url}" target="_blank" onclick="event.stopPropagation()" class="social-card instagram" style="height:100%; display:flex; flex-direction:column; justify-content:center;">
-                    <i class="fab fa-instagram" style="font-size:2rem;"></i>
-                    <span class="social-card-text">Lihat di Instagram</span>
-                </a>`;
+                return '<a href="' + url + '" target="_blank" onclick="event.stopPropagation()" class="social-card instagram" style="height:100%; display:flex; flex-direction:column; justify-content:center;"><i class="fab fa-instagram" style="font-size:2rem;"></i><span class="social-card-text">Lihat di Instagram</span></a>';
             }
 
             // Cek TikTok
             if (url.includes('tiktok.com')) {
-                return `<a href="${url}" target="_blank" onclick="event.stopPropagation()" class="social-card tiktok" style="height:100%; display:flex; flex-direction:column; justify-content:center;">
-                    <i class="fab fa-tiktok" style="font-size:2rem;"></i>
-                    <span class="social-card-text">Lihat di TikTok</span>
-                </a>`;
+                return '<a href="' + url + '" target="_blank" onclick="event.stopPropagation()" class="social-card tiktok" style="height:100%; display:flex; flex-direction:column; justify-content:center;"><i class="fab fa-tiktok" style="font-size:2rem;"></i><span class="social-card-text">Lihat di TikTok</span></a>';
             }
 
             // Default: Gambar Biasa
-            return `<img src="${url}" alt="${altText}">`;
+            return '<img src="' + url + '" alt="' + altText + '">';
         }
         
 
