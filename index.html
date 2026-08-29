@@ -2063,17 +2063,16 @@
                 </div>
             `).join('');
 
-            if (archived.length > 0) {
+                        if (archived.length > 0) {
                 container.innerHTML += `
                     <div style="grid-column:1/-1;text-align:center;margin-top:20px;">
-                        <select onchange="if(this.value !== '') { openModal('kisah', this.value); this.value=''; }" style="padding:10px 20px;border-radius:8px;background:#0d7a3a;color:white;border:none;cursor:pointer;font-weight:bold;font-size:14px;">
+                        <select onchange="if(this.value !== '') { openModal('kisah', this.value); this.value=''; }" style="width:100%; max-width:400px; padding:10px 20px;border-radius:8px;background:#0d7a3a;color:white;border:none;cursor:pointer;font-weight:bold;font-size:14px;">
                             <option value="">📂 Lihat Arsip Kisah Lainnya (${archived.length})</option>
                             ${archived.map((k, idx) => `<option value="${idx + limit}">${k.judul} - ${formatDate(k.tanggal)}</option>`).join('')}
                         </select>
                     </div>
                 `;
             }
-        }
 
                   function renderGaleri() {
             const track = document.getElementById('galeriTrack');
