@@ -2526,20 +2526,20 @@
             countdownInterval = setInterval(updateCountdown, 1000);
         }
 
-        // ==================== RADIO - LANGSUNG LOAD ====================
+                // ==================== RADIO - LANGSUNG LOAD ====================
         function loadRadio() {
             const container = document.getElementById('radioContainer');
-            const isMobile = window.innerWidth < 769;
-            const width = isMobile ? 280 : 600;
-            const height = isMobile ? 450 : 300;
             
             container.innerHTML = `
                 <iframe 
                     src="https://juneid19.github.io/kiara4ucast/" 
-                    width="${width}" 
-                    height="${height}"
-                    allow="autoplay"
-                    style="border-radius: 10px; border: none;">
+                    style="width: 100%; 
+                           max-width: 600px; 
+                           height: 450px; 
+                           border-radius: 10px; 
+                           border: none; 
+                           display: block; 
+                           margin: 20px auto 0 auto;">
                 </iframe>
             `;
         }
@@ -2695,6 +2695,33 @@
                         #install-banner { flex-wrap: wrap; text-align: center; justify-content: center; }
                         #install-banner .icon { display: none; }
                     }
+
+                            /* === FIX RADIO PLAYER LAPTOP === */
+        .radio-player {
+            width: 100% !important;
+            max-width: 600px !important;
+            height: auto !important;
+            margin: 20px auto !important;
+            padding: 0 !important;
+            overflow: visible !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+        }
+
+        .radio-iframe-container {
+            width: 100% !important;
+            height: auto !important;
+            min-height: 450px !important;
+            overflow: visible !important;
+            display: flex !important;
+            justify-content: center !important;
+        }
+
+        .radio-alt {
+            margin-top: 20px !important;
+            text-align: center !important;
+        }
                 </style>
                 <span class="icon">🕌</span>
                 <div class="text">
