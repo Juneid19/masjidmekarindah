@@ -1754,21 +1754,20 @@
         }
 
                 // ==================== DATA LOADING ====================
-        async function loadData() {
+              async function loadData() {
             showLoading();
             try {
-                const snapshot = await database.ref('masjidData').get();
+                var snapshot = await database.ref('masjidData').get();
                 if (snapshot.exists()) {
                     DATA = snapshot.val();
                 }
                 setCache(DATA);
                 renderAll();
-                refreshDataInBackground();
             } catch (error) {
                 console.error('Error loading data:', error);
                 loadDefaultData();
             } finally {
-                hideLoading(); // INI WAJIB ADA BIAR LOADING BERHENTI
+                hideLoading();
             }
         }
 
@@ -1949,46 +1948,31 @@
             container.innerHTML = html;
         }
 
-                function renderKajian() {
-            const container = document.getElementById('kajianGrid');
+                       function renderKajian() {
+            var container = document.getElementById('kajianGrid');
             if (!DATA.kajian || DATA.kajian.length === 0) {
                 container.innerHTML = '<p style="text-align:center;color:var(--gray);grid-column:1/-1;">Belum ada jadwal kajian</p>';
                 return;
             }
-
-            container.innerHTML = DATA.kajian.map(k => {
-                // Ambil ID YouTube dari link
-                const videoId = k.link ? extractYouTubeId(k.link) : '';
-
-                return `
-                    <div class="kajian-card">
-                        <div class="kajian-header">
-                            <div class="kajian-icon"><i class="fas fa-book-reader"></i></div>
-                            <div>
-                                <p class="kajian-hari">${k.hari}</p>
-                                <p class="kajian-waktu">${k.waktu}</p>
-                            </div>
-                        </div>
-                        <p class="kajian-tema">${k.tema}</p>
-                        <p class="kajian-ustadz"><i class="fas fa-user"></i> ${k.ustadz}</p>
-                        
-                        ${k.link ? `
-                            <div onclick="window.open('${k.link}', '_blank')" style="margin-top:15px; border-radius:8px; overflow:hidden; position:relative; cursor:pointer;">
-                                <img src="https://img.youtube.com/vi/${videoId}/maxresdefault.jpg" 
-                                     onerror="this.src='https://img.youtube.com/vi/${videoId}/hqdefault.jpg'" 
-                                     alt="Thumbnail Kajian" 
-                                     style="width:100%; display:block; aspect-ratio:16/9; object-fit:cover;">
-                                <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:rgba(13,122,58,0.8); color:white; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">
-                                    <i class="fas fa-play"></i>
-                                </div>
-                            </div>
-                            <a href="${k.link}" target="_blank" class="kajian-link" style="display:block; text-align:center; margin-top:10px;"><i class="fas fa-play-circle"></i> Tonton Video</a>
-                        ` : ''}
-                    </div>
-                `;
-            }).join('');
+            var html = '';
+            for (var i = 0; i < DATA.kajian.length; i++) {
+                var k = DATA.kajian[i];
+                var videoId = k.link ? extractYouTubeId(k.link) : '';
+                html += '<div class="kajian-card">';
+                html += '<div class="kajian-header"><div class="kajian-icon"><i class="fas fa-book-reader"></i></div><div><p class="kajian-hari">' + k.hari + '</p><p class="kajian-waktu">' + k.waktu + '</p></div></div>';
+                html += '<p class="kajian-tema">' + k.tema + '</p>';
+                html += '<p class="kajian-ustadz"><i class="fas fa-user"></i> ' + k.ustadz + '</p>';
+                if (k.link) {
+                    html += '<div onclick="window.open(\'' + k.link + '\', \'_blank\')" style="margin-top:15px; border-radius:8px; overflow:hidden; position:relative; cursor:pointer;">';
+                    html += '<img src="https://img.youtube.com/vi/' + videoId + '/maxresdefault.jpg" onerror="this.src=\'https://img.youtube.com/vi/' + videoId + '/hqdefault.jpg\'" alt="Thumbnail Kajian" style="width:100%; display:block; aspect-ratio:16/9; object-fit:cover;">';
+                    html += '<div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:rgba(13,122,58,0.8); color:white; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);"><i class="fas fa-play"></i></div>';
+                    html += '</div>';
+                    html += '<a href="' + k.link + '" target="_blank" class="kajian-link" style="display:block; text-align:center; margin-top:10px;"><i class="fas fa-play-circle"></i> Tonton Video</a>';
+                }
+                html += '</div>';
+            }
+            container.innerHTML = html;
         }
-
         function renderKeuangan() {
             const container = document.getElementById('keuanganAccordion');
             if (!DATA.keuangan || DATA.keuangan.length === 0) {
@@ -2140,78 +2124,42 @@
             }
         }
 
-                  function renderGaleri() {
-            const track = document.getElementById('galeriTrack');
-            const dots = document.getElementById('galeriDots');
-
+                         function renderGaleri() {
+            var track = document.getElementById('galeriTrack');
+            var dots = document.getElementById('galeriDots');
             if (!DATA.galeri || DATA.galeri.length === 0) {
                 track.innerHTML = '<div class="galeri-slide"><p style="text-align:center;padding:50px;color:var(--gray);">Belum ada galeri</p></div>';
                 dots.innerHTML = '';
                 return;
             }
-
-            // FIFO FIX: Karena di Admin pakai push(), urutan di array sudah benar (lama ke baru). Jadi langsung pakai DATA.galeri.
-            track.innerHTML = DATA.galeri.map((g, i) => {
+            var html = '';
+            for (var i = 0; i < DATA.galeri.length; i++) {
+                var g = DATA.galeri[i];
+                html += '<div class="galeri-slide">';
                 if (g.tipe === 'foto') {
-                    return `
-                        <div class="galeri-slide">
-                            <img src="${g.url}" alt="${g.keterangan || ''}">
-                            ${g.keterangan ? `<div class="galeri-caption">${g.keterangan}</div>` : ''}
-                        </div>
-                    `;
+                    html += '<img src="' + g.url + '" alt="' + (g.keterangan || '') + '">';
+                    if (g.keterangan) { html += '<div class="galeri-caption">' + g.keterangan + '</div>'; }
                 } else if (g.tipe === 'mp4') {
-                    return `
-                        <div class="galeri-slide">
-                            <video controls style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
-                                <source src="${g.url}" type="video/mp4">
-                                Browser Anda tidak mendukung tag video.
-                            </video>
-                            ${g.keterangan ? `<div class="galeri-caption">${g.keterangan}</div>` : ''}
-                        </div>
-                    `;
+                    html += '<video controls style="width: 100%; height: auto; max-height: 450px; aspect-ratio: 16/9; object-fit: contain; border-radius: 10px; background:#000;"><source src="' + g.url + '" type="video/mp4">Browser tidak mendukung.</video>';
+                    if (g.keterangan) { html += '<div class="galeri-caption">' + g.keterangan + '</div>'; }
                 } else if (g.tipe === 'youtube') {
-                    const videoId = extractYouTubeId(g.url);
-                    return `
-                        <div class="galeri-slide" data-video-id="${videoId}">
-                            <div class="youtube-thumbnail" onclick="playYouTube(this, '${videoId}')">
-                                <img src="https://img.youtube.com/vi/${videoId}/maxresdefault.jpg" 
-                                     onerror="this.src='https://img.youtube.com/vi/${videoId}/hqdefault.jpg'" 
-                                     alt="YouTube Video">
-                                <div class="youtube-play-btn"><i class="fas fa-play"></i></div>
-                            </div>
-                            ${g.keterangan ? `<div class="galeri-caption">${g.keterangan}</div>` : ''}
-                        </div>
-                    `;
+                    var videoId = extractYouTubeId(g.url);
+                    html += '<div class="youtube-thumbnail" onclick="playYouTube(this, \'' + videoId + '\')"><img src="https://img.youtube.com/vi/' + videoId + '/maxresdefault.jpg" onerror="this.src=\'https://img.youtube.com/vi/' + videoId + '/hqdefault.jpg\'" alt="YouTube Video"><div class="youtube-play-btn"><i class="fas fa-play"></i></div></div>';
+                    if (g.keterangan) { html += '<div class="galeri-caption">' + g.keterangan + '</div>'; }
                 } else if (g.tipe === 'instagram') {
-                    return `
-                        <div class="galeri-slide">
-                            <a href="${g.url}" target="_blank" class="social-card instagram">
-                                <i class="fab fa-instagram"></i>
-                                <span class="social-card-text">Lihat di Instagram</span>
-                                ${g.keterangan ? `<span class="social-card-keterangan">${g.keterangan}</span>` : ''}
-                                <span class="social-card-action">Buka Instagram</span>
-                            </a>
-                        </div>
-                    `;
+                    html += '<a href="' + g.url + '" target="_blank" class="social-card instagram"><i class="fab fa-instagram"></i><span class="social-card-text">Lihat di Instagram</span>' + (g.keterangan ? '<span class="social-card-keterangan">' + g.keterangan + '</span>' : '') + '<span class="social-card-action">Buka Instagram</span></a>';
                 } else if (g.tipe === 'tiktok') {
-                    return `
-                        <div class="galeri-slide">
-                            <a href="${g.url}" target="_blank" class="social-card tiktok">
-                                <i class="fab fa-tiktok"></i>
-                                <span class="social-card-text">Lihat di TikTok</span>
-                                ${g.keterangan ? `<span class="social-card-keterangan">${g.keterangan}</span>` : ''}
-                                <span class="social-card-action">Buka TikTok</span>
-                            </a>
-                        </div>
-                    `;
+                    html += '<a href="' + g.url + '" target="_blank" class="social-card tiktok"><i class="fab fa-tiktok"></i><span class="social-card-text">Lihat di TikTok</span>' + (g.keterangan ? '<span class="social-card-keterangan">' + g.keterangan + '</span>' : '') + '<span class="social-card-action">Buka TikTok</span></a>';
                 }
-                return '';
-            }).join('');
-
-            dots.innerHTML = DATA.galeri.map((_, i) => `
-                <div class="galeri-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></div>
-            `).join('');
-
+                html += '</div>';
+            }
+            track.innerHTML = html;
+            
+            var dotsHTML = '';
+            for (var j = 0; j < DATA.galeri.length; j++) {
+                dotsHTML += '<div class="galeri-dot ' + (j === 0 ? 'active' : '') + '" onclick="goToSlide(' + j + ')"></div>';
+            }
+            dots.innerHTML = dotsHTML;
             startSlideshow();
         }
 
