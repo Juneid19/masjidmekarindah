@@ -1807,7 +1807,18 @@
             renderAll();
         }
 
-		               // ==================== HADITS HARIAN ====================
+		    <!-- Running Text Hadits -->
+    <div class="hadits-ticker">
+        <div class="hadits-ticker-label">
+            <i class="fas fa-book-quran"></i> One Day One Hadits
+        </div>
+        <div class="hadits-ticker-content">
+            <span class="hadits-text" id="haditsText">Memuat hadits...</span>
+        </div>
+    </div>
+
+    <script>
+        // ==================== HADITS HARIAN ====================
         const kumpulanHadits = [
             "Barangsiapa menempuh jalan untuk menuntut ilmu, maka Allah akan memudahkan baginya jalan menuju surga. (HR. Muslim)",
             "Tidaklah dua orang berkumpul kecuali mereka berdua saling mencintai karena Allah. (HR. Bukhari)",
@@ -1818,17 +1829,16 @@
             "Cukuplah seseorang dikatakan berdusta jika ia menceritakan semua yang ia dengar. (HR. Muslim)"
         ];
 
-        function loadHaditsHarian() {
+        // Pakai window.onload biar nunggu halaman bener-bener selesai loading
+        window.onload = function() {
             const el = document.getElementById('haditsText');
-            if (!el) return; // Anti crash
-            
-            const hariIni = new Date().getDate(); // Ambil tanggal hari ini
-            const index = hariIni % kumpulanHadits.length; // Putar berdasarkan tanggal
-            el.textContent = kumpulanHadits[index];
-        }
-        
-        // Panggil fungsi ini saat web dibuka
-        loadHaditsHarian();
+            if (el) {
+                const hariIni = new Date().getDate();
+                const index = hariIni % kumpulanHadits.length;
+                el.textContent = kumpulanHadits[index];
+            }
+        };
+    </script>
         // ==================== RENDER FUNCTIONS ====================
         function renderAll() {
             hideLoading();
