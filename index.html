@@ -1768,7 +1768,8 @@
             } catch (error) {
                 console.error('Error loading data:', error);
                 loadDefaultData();
-            }
+             }
+            hideLoading(); // <--- INI WAJIB ADA BIAR LOADING BERHENTI!
         }
 
          async function refreshDataInBackground() {
