@@ -2205,9 +2205,9 @@
                 return `<img src="https://via.placeholder.com/800x500/0d7a3a/ffffff?text=Media" alt="${altText}">`;
             }
 
-            // Cek MP4
+                       // Cek MP4
             if (url.match(/\.(mp4)(\?|$)/i)) {
-                return `<video controls onclick="event.stopPropagation()" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                return `<video controls onclick="event.stopPropagation()" style="width: 100%; height: auto; max-height: 450px; aspect-ratio: 16/9; object-fit: contain; border-radius: 8px; background: #000;">
                     <source src="${url}" type="video/mp4">Browser tidak mendukung.
                 </video>`;
             }
@@ -2224,7 +2224,7 @@
                 </div>`;
             }
 
-                        // Cek Google Drive
+                                    // Cek Google Drive
             if (url.includes('drive.google.com')) {
                 let fileId = '';
                 const match = url.match(/\/file\/d\/(.*?)\//) || url.match(/[?&]id=(.*?)(?:&|$)/);
@@ -2234,7 +2234,7 @@
                 
                 if (fileId) {
                     return `
-                    <div onclick="event.stopPropagation()" style="position:relative; width:100%; aspect-ratio:16/9; border-radius:8px; overflow:hidden;">
+                    <div onclick="event.stopPropagation()" style="position:relative; width:100%; height:auto; max-height:450px; aspect-ratio:16/9; border-radius:8px; overflow:hidden; background:#000;">
                         <iframe src="https://drive.google.com/file/d/${fileId}/preview" 
                             style="width: 100%; height: 100%; border: none;" 
                             allow="autoplay" allowfullscreen></iframe>
