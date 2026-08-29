@@ -2042,38 +2042,40 @@
             }).join('');
         }
 
-                function renderKisah() {
+                 function renderKisah() {
             const container = document.getElementById('kisahGrid');
             if (!DATA.kisah || DATA.kisah.length === 0) {
                 container.innerHTML = '<p style="text-align:center;color:var(--gray);grid-column:1/-1;">Belum ada kisah inspiratif</p>';
                 return;
             }
 
+            // Balik urutan agar yang baru di atas, tapi simpan index aslinya
+            const reversedData = DATA.kisah.map((item, idx) => ({ item, idx })).reverse();
             const limit = 4;
-            const visible = DATA.kisah.slice(0, limit);
-            const archived = DATA.kisah.slice(limit);
+            const visible = reversedData.slice(0, limit);
+            const archived = reversedData.slice(limit);
 
-            container.innerHTML = visible.map((k, i) => `
-                <div class="content-card" onclick="openModal('kisah', ${i})">
-                    <img src="${k.gambar || 'https://via.placeholder.com/800x500/0d7a3a/ffffff?text=Kisah'}" alt="${k.judul}">
+            container.innerHTML = visible.map(({ item, idx }) => `
+                <div class="content-card" onclick="openModal('kisah', ${idx})">
+                    ${getMediaHTML(item.gambar, item.judul)}
                     <div class="content-card-body">
-                        <h4>${k.judul}</h4>
-                        <p class="date">${formatDate(k.tanggal)}</p>
+                        <h4>${item.judul}</h4>
+                        <p class="date">${formatDate(item.tanggal)}</p>
                     </div>
                 </div>
             `).join('');
 
-                        if (archived.length > 0) {
+            if (archived.length > 0) {
                 container.innerHTML += `
                     <div style="grid-column:1/-1;text-align:center;margin-top:20px;">
                         <select onchange="if(this.value !== '') { openModal('kisah', this.value); this.value=''; }" style="width:100%; max-width:400px; padding:10px 20px;border-radius:8px;background:#0d7a3a;color:white;border:none;cursor:pointer;font-weight:bold;font-size:14px;">
                             <option value="">📂 Lihat Arsip Kisah Lainnya (${archived.length})</option>
-                            ${archived.map((k, idx) => `<option value="${idx + limit}">${k.judul} - ${formatDate(k.tanggal)}</option>`).join('')}
+                            ${archived.map(({ item, idx }) => `<option value="${idx}">${item.judul} - ${formatDate(item.tanggal)}</option>`).join('')}
                         </select>
                     </div>
                 `;
             }
-                }
+        }
 
                   function renderGaleri() {
             const track = document.getElementById('galeriTrack');
@@ -2150,39 +2152,40 @@
             startSlideshow();
         }
 
-                function renderSerbaSerbi() {
+                   function renderSerbaSerbi() {
             const container = document.getElementById('serbaSerbiGrid');
             if (!DATA.serbaSerbi || DATA.serbaSerbi.length === 0) {
                 container.innerHTML = '<p style="text-align:center;color:var(--gray);grid-column:1/-1;">Belum ada artikel</p>';
                 return;
             }
 
+            // Balik urutan agar yang baru di atas, tapi simpan index aslinya
+            const reversedData = DATA.serbaSerbi.map((item, idx) => ({ item, idx })).reverse();
             const limit = 4;
-            const visible = DATA.serbaSerbi.slice(0, limit);
-            const archived = DATA.serbaSerbi.slice(limit);
+            const visible = reversedData.slice(0, limit);
+            const archived = reversedData.slice(limit);
 
-            container.innerHTML = visible.map((s, i) => `
-                <div class="content-card" onclick="openModal('serbaSerbi', ${i})">
-                    <img src="${s.gambar || 'https://via.placeholder.com/800x500/0d7a3a/ffffff?text=Artikel'}" alt="${s.judul}">
+            container.innerHTML = visible.map(({ item, idx }) => `
+                <div class="content-card" onclick="openModal('serbaSerbi', ${idx})">
+                    ${getMediaHTML(item.gambar, item.judul)}
                     <div class="content-card-body">
-                        <h4>${s.judul}${s.penting ? '<span class="badge-penting">PENTING</span>' : ''}</h4>
-                        <p class="date">${formatDate(s.tanggal)}</p>
+                        <h4>${item.judul}${item.penting ? '<span class="badge-penting">PENTING</span>' : ''}</h4>
+                        <p class="date">${formatDate(item.tanggal)}</p>
                     </div>
                 </div>
             `).join('');
 
-                        if (archived.length > 0) {
+            if (archived.length > 0) {
                 container.innerHTML += `
                     <div style="grid-column:1/-1;text-align:center;margin-top:20px;">
                         <select onchange="if(this.value !== '') { openModal('serbaSerbi', this.value); this.value=''; }" style="width:100%; max-width:400px; padding:10px 20px;border-radius:8px;background:#0d7a3a;color:white;border:none;cursor:pointer;font-weight:bold;font-size:14px;">
                             <option value="">📂 Lihat Arsip Serba-Serbi Lainnya (${archived.length})</option>
-                            ${archived.map((s, idx) => `<option value="${idx + limit}">${s.judul} - ${formatDate(s.tanggal)}</option>`).join('')}
+                            ${archived.map(({ item, idx }) => `<option value="${idx}">${item.judul} - ${formatDate(item.tanggal)}</option>`).join('')}
                         </select>
                     </div>
                 `;
             }
-                }
-
+        }
         // ==================== HELPER FUNCTIONS ====================
         function formatRupiah(num) {
             return 'Rp ' + (num || 0).toLocaleString('id-ID');
@@ -2205,7 +2208,7 @@
                 return `<img src="https://via.placeholder.com/800x500/0d7a3a/ffffff?text=Media" alt="${altText}">`;
             }
 
-                       // Cek MP4
+                        // Cek MP4
             if (url.match(/\.(mp4)(\?|$)/i)) {
                 return `<video controls onclick="event.stopPropagation()" style="width: 100%; height: auto; max-height: 450px; aspect-ratio: 16/9; object-fit: contain; border-radius: 8px; background: #000;">
                     <source src="${url}" type="video/mp4">Browser tidak mendukung.
@@ -2223,23 +2226,13 @@
                     </div>
                 </div>`;
             }
-
-                                    // Cek Google Drive
+			
+			                // Cek Google Drive
             if (url.includes('drive.google.com')) {
-                let fileId = '';
-                const match = url.match(/\/file\/d\/(.*?)\//) || url.match(/[?&]id=(.*?)(?:&|$)/);
-                if (match && match[1]) {
-                    fileId = match[1];
-                }
-                
-                if (fileId) {
-                    return `
-                    <div onclick="event.stopPropagation()" style="position:relative; width:100%; height:auto; max-height:450px; aspect-ratio:16/9; border-radius:8px; overflow:hidden; background:#000;">
-                        <iframe src="https://drive.google.com/file/d/${fileId}/preview" 
-                            style="width: 100%; height: 100%; border: none;" 
-                            allow="autoplay" allowfullscreen></iframe>
-                    </div>`;
-                }
+                return `<a href="${url}" target="_blank" onclick="event.stopPropagation()" style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; background:#1E88E5; color:white; text-decoration:none; border-radius:8px; padding:20px; font-weight:bold;">
+                    <i class="fab fa-google-drive" style="font-size:2.5rem; margin-bottom:10px;"></i>
+                    <span>Buka Video di Drive</span>
+                </a>`;
             }
 
             // Cek Instagram
@@ -2544,20 +2537,20 @@
             countdownInterval = setInterval(updateCountdown, 1000);
         }
 
-                // ==================== RADIO - LANGSUNG LOAD ====================
+        // ==================== RADIO - LANGSUNG LOAD ====================
         function loadRadio() {
             const container = document.getElementById('radioContainer');
+            const isMobile = window.innerWidth < 769;
+            const width = isMobile ? 280 : 600;
+            const height = isMobile ? 450 : 300;
             
             container.innerHTML = `
                 <iframe 
                     src="https://juneid19.github.io/kiara4ucast/" 
-                    style="width: 100%; 
-                           max-width: 600px; 
-                           height: 450px; 
-                           border-radius: 10px; 
-                           border: none; 
-                           display: block; 
-                           margin: 20px auto 0 auto;">
+                    width="${width}" 
+                    height="${height}"
+                    allow="autoplay"
+                    style="border-radius: 10px; border: none;">
                 </iframe>
             `;
         }
@@ -2713,33 +2706,6 @@
                         #install-banner { flex-wrap: wrap; text-align: center; justify-content: center; }
                         #install-banner .icon { display: none; }
                     }
-
-                            /* === FIX RADIO PLAYER LAPTOP === */
-        .radio-player {
-            width: 100% !important;
-            max-width: 600px !important;
-            height: auto !important;
-            margin: 20px auto !important;
-            padding: 0 !important;
-            overflow: visible !important;
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-        }
-
-        .radio-iframe-container {
-            width: 100% !important;
-            height: auto !important;
-            min-height: 450px !important;
-            overflow: visible !important;
-            display: flex !important;
-            justify-content: center !important;
-        }
-
-        .radio-alt {
-            margin-top: 20px !important;
-            text-align: center !important;
-        }
                 </style>
                 <span class="icon">🕌</span>
                 <div class="text">
