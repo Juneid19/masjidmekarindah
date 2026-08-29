@@ -1886,27 +1886,44 @@
             container.innerHTML = html;
         }
 
-        function renderKajian() {
+                function renderKajian() {
             const container = document.getElementById('kajianGrid');
             if (!DATA.kajian || DATA.kajian.length === 0) {
                 container.innerHTML = '<p style="text-align:center;color:var(--gray);grid-column:1/-1;">Belum ada jadwal kajian</p>';
                 return;
             }
 
-            container.innerHTML = DATA.kajian.map(k => `
-                <div class="kajian-card">
-                    <div class="kajian-header">
-                        <div class="kajian-icon"><i class="fas fa-book-reader"></i></div>
-                        <div>
-                            <p class="kajian-hari">${k.hari}</p>
-                            <p class="kajian-waktu">${k.waktu}</p>
+            container.innerHTML = DATA.kajian.map(k => {
+                // Ambil ID YouTube dari link
+                const videoId = k.link ? extractYouTubeId(k.link) : '';
+
+                return `
+                    <div class="kajian-card">
+                        <div class="kajian-header">
+                            <div class="kajian-icon"><i class="fas fa-book-reader"></i></div>
+                            <div>
+                                <p class="kajian-hari">${k.hari}</p>
+                                <p class="kajian-waktu">${k.waktu}</p>
+                            </div>
                         </div>
+                        <p class="kajian-tema">${k.tema}</p>
+                        <p class="kajian-ustadz"><i class="fas fa-user"></i> ${k.ustadz}</p>
+                        
+                        ${k.link ? `
+                            <div onclick="window.open('${k.link}', '_blank')" style="margin-top:15px; border-radius:8px; overflow:hidden; position:relative; cursor:pointer;">
+                                <img src="https://img.youtube.com/vi/${videoId}/maxresdefault.jpg" 
+                                     onerror="this.src='https://img.youtube.com/vi/${videoId}/hqdefault.jpg'" 
+                                     alt="Thumbnail Kajian" 
+                                     style="width:100%; display:block; aspect-ratio:16/9; object-fit:cover;">
+                                <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:rgba(13,122,58,0.8); color:white; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">
+                                    <i class="fas fa-play"></i>
+                                </div>
+                            </div>
+                            <a href="${k.link}" target="_blank" class="kajian-link" style="display:block; text-align:center; margin-top:10px;"><i class="fas fa-play-circle"></i> Tonton Video</a>
+                        ` : ''}
                     </div>
-                    <p class="kajian-tema">${k.tema}</p>
-                    <p class="kajian-ustadz"><i class="fas fa-user"></i> ${k.ustadz}</p>
-                    ${k.link ? `<a href="${k.link}" target="_blank" class="kajian-link"><i class="fas fa-play-circle"></i> Tonton Video</a>` : ''}
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function renderKeuangan() {
@@ -2025,14 +2042,18 @@
             }).join('');
         }
 
-        function renderKisah() {
+                function renderKisah() {
             const container = document.getElementById('kisahGrid');
             if (!DATA.kisah || DATA.kisah.length === 0) {
                 container.innerHTML = '<p style="text-align:center;color:var(--gray);grid-column:1/-1;">Belum ada kisah inspiratif</p>';
                 return;
             }
 
-            container.innerHTML = DATA.kisah.map((k, i) => `
+            const limit = 4;
+            const visible = DATA.kisah.slice(0, limit);
+            const archived = DATA.kisah.slice(limit);
+
+            container.innerHTML = visible.map((k, i) => `
                 <div class="content-card" onclick="openModal('kisah', ${i})">
                     <img src="${k.gambar || 'https://via.placeholder.com/800x500/0d7a3a/ffffff?text=Kisah'}" alt="${k.judul}">
                     <div class="content-card-body">
@@ -2041,9 +2062,20 @@
                     </div>
                 </div>
             `).join('');
+
+            if (archived.length > 0) {
+                container.innerHTML += `
+                    <div style="grid-column:1/-1;text-align:center;margin-top:20px;">
+                        <select onchange="if(this.value !== '') { openModal('kisah', this.value); this.value=''; }" style="padding:10px 20px;border-radius:8px;background:#0d7a3a;color:white;border:none;cursor:pointer;font-weight:bold;font-size:14px;">
+                            <option value="">📂 Lihat Arsip Kisah Lainnya (${archived.length})</option>
+                            ${archived.map((k, idx) => `<option value="${idx + limit}">${k.judul} - ${formatDate(k.tanggal)}</option>`).join('')}
+                        </select>
+                    </div>
+                `;
+            }
         }
 
-        function renderGaleri() {
+                  function renderGaleri() {
             const track = document.getElementById('galeriTrack');
             const dots = document.getElementById('galeriDots');
 
@@ -2053,11 +2085,22 @@
                 return;
             }
 
+            // FIFO FIX: Karena di Admin pakai push(), urutan di array sudah benar (lama ke baru). Jadi langsung pakai DATA.galeri.
             track.innerHTML = DATA.galeri.map((g, i) => {
                 if (g.tipe === 'foto') {
                     return `
                         <div class="galeri-slide">
                             <img src="${g.url}" alt="${g.keterangan || ''}">
+                            ${g.keterangan ? `<div class="galeri-caption">${g.keterangan}</div>` : ''}
+                        </div>
+                    `;
+                } else if (g.tipe === 'mp4') {
+                    return `
+                        <div class="galeri-slide">
+                            <video controls style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+                                <source src="${g.url}" type="video/mp4">
+                                Browser Anda tidak mendukung tag video.
+                            </video>
                             ${g.keterangan ? `<div class="galeri-caption">${g.keterangan}</div>` : ''}
                         </div>
                     `;
@@ -2069,9 +2112,7 @@
                                 <img src="https://img.youtube.com/vi/${videoId}/maxresdefault.jpg" 
                                      onerror="this.src='https://img.youtube.com/vi/${videoId}/hqdefault.jpg'" 
                                      alt="YouTube Video">
-                                <div class="youtube-play-btn">
-                                    <i class="fas fa-play"></i>
-                                </div>
+                                <div class="youtube-play-btn"><i class="fas fa-play"></i></div>
                             </div>
                             ${g.keterangan ? `<div class="galeri-caption">${g.keterangan}</div>` : ''}
                         </div>
@@ -2109,14 +2150,18 @@
             startSlideshow();
         }
 
-        function renderSerbaSerbi() {
+                function renderSerbaSerbi() {
             const container = document.getElementById('serbaSerbiGrid');
             if (!DATA.serbaSerbi || DATA.serbaSerbi.length === 0) {
                 container.innerHTML = '<p style="text-align:center;color:var(--gray);grid-column:1/-1;">Belum ada artikel</p>';
                 return;
             }
 
-            container.innerHTML = DATA.serbaSerbi.map((s, i) => `
+            const limit = 4;
+            const visible = DATA.serbaSerbi.slice(0, limit);
+            const archived = DATA.serbaSerbi.slice(limit);
+
+            container.innerHTML = visible.map((s, i) => `
                 <div class="content-card" onclick="openModal('serbaSerbi', ${i})">
                     <img src="${s.gambar || 'https://via.placeholder.com/800x500/0d7a3a/ffffff?text=Artikel'}" alt="${s.judul}">
                     <div class="content-card-body">
@@ -2125,6 +2170,17 @@
                     </div>
                 </div>
             `).join('');
+
+            if (archived.length > 0) {
+                container.innerHTML += `
+                    <div style="grid-column:1/-1;text-align:center;margin-top:20px;">
+                        <select onchange="if(this.value !== '') { openModal('serbaSerbi', this.value); this.value=''; }" style="padding:10px 20px;border-radius:8px;background:#0d7a3a;color:white;border:none;cursor:pointer;font-weight:bold;font-size:14px;">
+                            <option value="">📂 Lihat Arsip Serba-Serbi Lainnya (${archived.length})</option>
+                            ${archived.map((s, idx) => `<option value="${idx + limit}">${s.judul} - ${formatDate(s.tanggal)}</option>`).join('')}
+                        </select>
+                    </div>
+                `;
+            }
         }
 
         // ==================== HELPER FUNCTIONS ====================
@@ -2138,10 +2194,56 @@
             return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
         }
 
-        function extractYouTubeId(url) {
+                function extractYouTubeId(url) {
             const match = url.match(/(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([^"&?\/\s]{11})/);
             return match ? match[1] : '';
         }
+
+        // === DETEKTOR MEDIA PINTAR ===
+        function getMediaHTML(url, altText = '') {
+            if (!url) {
+                return `<img src="https://via.placeholder.com/800x500/0d7a3a/ffffff?text=Media" alt="${altText}">`;
+            }
+
+            // Cek MP4
+            if (url.match(/\.(mp4)(\?|$)/i)) {
+                return `<video controls onclick="event.stopPropagation()" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                    <source src="${url}" type="video/mp4">Browser tidak mendukung.
+                </video>`;
+            }
+
+            // Cek YouTube
+            const videoId = extractYouTubeId(url);
+            if (videoId) {
+                return `
+                <div onclick="event.stopPropagation(); window.open('${url}', '_blank')" style="position:relative; cursor:pointer; height:100%;">
+                    <img src="https://img.youtube.com/vi/${videoId}/maxresdefault.jpg" onerror="this.src='https://img.youtube.com/vi/${videoId}/hqdefault.jpg'" alt="${altText}" style="width:100%; height:100%; object-fit:cover;">
+                    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:rgba(0,0,0,0.6); color:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px;">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>`;
+            }
+
+            // Cek Instagram
+            if (url.includes('instagram.com')) {
+                return `<a href="${url}" target="_blank" onclick="event.stopPropagation()" class="social-card instagram" style="height:100%; display:flex; flex-direction:column; justify-content:center;">
+                    <i class="fab fa-instagram" style="font-size:2rem;"></i>
+                    <span class="social-card-text">Lihat di Instagram</span>
+                </a>`;
+            }
+
+            // Cek TikTok
+            if (url.includes('tiktok.com')) {
+                return `<a href="${url}" target="_blank" onclick="event.stopPropagation()" class="social-card tiktok" style="height:100%; display:flex; flex-direction:column; justify-content:center;">
+                    <i class="fab fa-tiktok" style="font-size:2rem;"></i>
+                    <span class="social-card-text">Lihat di TikTok</span>
+                </a>`;
+            }
+
+            // Default: Gambar Biasa
+            return `<img src="${url}" alt="${altText}">`;
+        }
+        
 
         // ==================== YOUTUBE PLAY FUNCTION ====================
         function playYouTube(container, videoId) {
@@ -2250,13 +2352,29 @@
             startSlideshow();
         }
 
-        // ==================== MODAL ====================
+               // ==================== MODAL ====================
         function openModal(type, index) {
             const modal = document.getElementById('contentModal');
             const data = type === 'kisah' ? DATA.kisah[index] : DATA.serbaSerbi[index];
             
             document.getElementById('modalTitle').textContent = data.judul;
-            document.getElementById('modalImage').src = data.gambar || '';
+            
+            // Detektor Media Pintar untuk Pop-up
+            let mediaDiv = document.getElementById('modalImage');
+            // Kalau tadinya tag <img>, kita ganti jadi <div> biar bisa nampung video
+            if (mediaDiv.tagName === 'IMG') {
+                const newDiv = document.createElement('div');
+                newDiv.id = 'modalImage';
+                newDiv.style.width = '100%';
+                newDiv.style.minHeight = '200px';
+                newDiv.style.marginBottom = '15px';
+                newDiv.style.borderRadius = '8px';
+                newDiv.style.overflow = 'hidden';
+                mediaDiv.parentNode.replaceChild(newDiv, mediaDiv);
+                mediaDiv = newDiv;
+            }
+            mediaDiv.innerHTML = getMediaHTML(data.gambar, data.judul);
+            
             document.getElementById('modalContent').textContent = data.isi || '';
             
             modal.classList.add('show');
