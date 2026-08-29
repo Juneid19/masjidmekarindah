@@ -1754,7 +1754,7 @@
         }
 
         // ==================== DATA LOADING ====================
-                       // ==================== DATA LOADING ====================
+                      
         async function loadData() {
             try {
                 // Ambil data dari path 'masjidData' di Firebase
@@ -1806,6 +1806,26 @@
             };
             renderAll();
         }
+
+		        // ==================== HADITS HARIAN ====================
+        const kumpulanHadits = [
+            "Barangsiapa menempuh jalan untuk menuntut ilmu, maka Allah akan memudahkan baginya jalan menuju surga. (HR. Muslim)",
+            "Tidaklah dua orang berkumpul kecuali mereka berdua saling mencintai karena Allah. (HR. Bukhari)",
+            "Orang mukmin yang paling sempurna imannya adalah yang paling baik akhlaknya. (HR. Ahmad)",
+            "Sebaik-baik manusia adalah yang paling bermanfaat bagi manusia lainnya. (HR. Ahmad)",
+            "Siapa menjamin untukku apa yang ada antara dua rahangnya (lidah) dan apa yang ada antara dua kakinya (kemaluan), aku jamin surga baginya. (HR. Bukhari)",
+            "Senyummu kepada saudaramu adalah sedekah. (HR. Tirmidzi)",
+            "Cukuplah seseorang dikatakan berdusta jika ia menceritakan semua yang ia dengar. (HR. Muslim)"
+        ];
+
+        function loadHaditsHarian() {
+            const hariIni = new Date().getDate(); // Ambil tanggal hari ini
+            const index = hariIni % kumpulanHadits.length; // Putar berdasarkan tanggal
+            document.getElementById('haditsText').textContent = kumpulanHadits[index];
+        }
+        
+        // Panggil fungsi ini saat web dibuka
+        loadHaditsHarian();
 
         // ==================== RENDER FUNCTIONS ====================
         function renderAll() {
@@ -2732,6 +2752,47 @@
                         #install-banner { flex-wrap: wrap; text-align: center; justify-content: center; }
                         #install-banner .icon { display: none; }
                     }
+
+					        /* === RUNNING TEXT HADITS === */
+        .hadits-ticker {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, #0d7a3a, #11998e);
+            color: white;
+            display: flex;
+            align-items: center;
+            z-index: 9999;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .hadits-ticker-label {
+            background: rgba(0,0,0,0.3);
+            padding: 10px 15px;
+            font-weight: bold;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .hadits-ticker-content {
+            overflow: hidden;
+            white-space: nowrap;
+            flex: 1;
+        }
+        .hadits-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 25s linear infinite;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+		
                 </style>
                 <span class="icon">🕌</span>
                 <div class="text">
@@ -2814,5 +2875,14 @@
             });
         });
     </script>
+	    <!-- Running Text Hadits -->
+    <div class="hadits-ticker">
+        <div class="hadits-ticker-label">
+            <i class="fas fa-book-quran"></i> One Day One Hadits
+        </div>
+        <div class="hadits-ticker-content">
+            <span class="hadits-text" id="haditsText">Memuat hadits...</span>
+        </div>
+    </div>p
 </body>
 </html>
