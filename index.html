@@ -2089,39 +2089,36 @@
             }).join('');
         }
 
-                 function renderKisah() {
-            const container = document.getElementById('kisahGrid');
+                         function renderKisah() {
+            var container = document.getElementById('kisahGrid');
             if (!DATA.kisah || DATA.kisah.length === 0) {
                 container.innerHTML = '<p style="text-align:center;color:var(--gray);grid-column:1/-1;">Belum ada kisah inspiratif</p>';
                 return;
             }
 
-            // Balik urutan agar yang baru di atas, tapi simpan index aslinya
-            const reversedData = DATA.kisah.map((item, idx) => ({ item, idx })).reverse();
-            const limit = 4;
-            const visible = reversedData.slice(0, limit);
-            const archived = reversedData.slice(limit);
+            var reversedData = DATA.kisah.map(function(item, idx) { return { item: item, idx: idx }; }).reverse();
+            var limit = 4;
+            var visible = reversedData.slice(0, limit);
+            var archived = reversedData.slice(limit);
 
-            container.innerHTML = visible.map(({ item, idx }) => `
-                <div class="content-card" onclick="openModal('kisah', ${idx})">
-                    ${getMediaHTML(item.gambar, item.judul)}
-                    <div class="content-card-body">
-                        <h4>${item.judul}</h4>
-                        <p class="date">${formatDate(item.tanggal)}</p>
-                    </div>
-                </div>
-            `).join('');
-
-            if (archived.length > 0) {
-                container.innerHTML += `
-                    <div style="grid-column:1/-1;text-align:center;margin-top:20px;">
-                        <select onchange="if(this.value !== '') { openModal('kisah', this.value); this.value=''; }" style="width:100%; max-width:400px; padding:10px 20px;border-radius:8px;background:#0d7a3a;color:white;border:none;cursor:pointer;font-weight:bold;font-size:14px;">
-                            <option value="">📂 Lihat Arsip Kisah Lainnya (${archived.length})</option>
-                            ${archived.map(({ item, idx }) => `<option value="${idx}">${item.judul} - ${formatDate(item.tanggal)}</option>`).join('')}
-                        </select>
-                    </div>
-                `;
+            var html = '';
+            for (var i = 0; i < visible.length; i++) {
+                var obj = visible[i];
+                html += '<div class="content-card" onclick="openModal(\'kisah\', ' + obj.idx + ')">';
+                html += getMediaHTML(obj.item.gambar, obj.item.judul);
+                html += '<div class="content-card-body"><h4>' + obj.item.judul + '</h4><p class="date">' + formatDate(obj.item.tanggal) + '</p></div>';
+                html += '</div>';
             }
+            
+            if (archived.length > 0) {
+                html += '<div style="grid-column:1/-1;text-align:center;margin-top:20px;"><select onchange="if(this.value !== \'\') { openModal(\'kisah\', this.value); this.value=\'\'; }" style="width:100%; max-width:400px; padding:10px 20px;border-radius:8px;background:#0d7a3a;color:white;border:none;cursor:pointer;font-weight:bold;font-size:14px;"><option value="">📂 Lihat Arsip Kisah Lainnya (' + archived.length + ')</option>';
+                for (var j = 0; j < archived.length; j++) {
+                    var arc = archived[j];
+                    html += '<option value="' + arc.idx + '">' + arc.item.judul + ' - ' + formatDate(arc.item.tanggal) + '</option>';
+                }
+                html += '</select></div>';
+            }
+            container.innerHTML = html;
         }
 
                          function renderGaleri() {
@@ -2163,39 +2160,36 @@
             startSlideshow();
         }
 
-                   function renderSerbaSerbi() {
-            const container = document.getElementById('serbaSerbiGrid');
+                           function renderSerbaSerbi() {
+            var container = document.getElementById('serbaSerbiGrid');
             if (!DATA.serbaSerbi || DATA.serbaSerbi.length === 0) {
                 container.innerHTML = '<p style="text-align:center;color:var(--gray);grid-column:1/-1;">Belum ada artikel</p>';
                 return;
             }
 
-            // Balik urutan agar yang baru di atas, tapi simpan index aslinya
-            const reversedData = DATA.serbaSerbi.map((item, idx) => ({ item, idx })).reverse();
-            const limit = 4;
-            const visible = reversedData.slice(0, limit);
-            const archived = reversedData.slice(limit);
+            var reversedData = DATA.serbaSerbi.map(function(item, idx) { return { item: item, idx: idx }; }).reverse();
+            var limit = 4;
+            var visible = reversedData.slice(0, limit);
+            var archived = reversedData.slice(limit);
 
-            container.innerHTML = visible.map(({ item, idx }) => `
-                <div class="content-card" onclick="openModal('serbaSerbi', ${idx})">
-                    ${getMediaHTML(item.gambar, item.judul)}
-                    <div class="content-card-body">
-                        <h4>${item.judul}${item.penting ? '<span class="badge-penting">PENTING</span>' : ''}</h4>
-                        <p class="date">${formatDate(item.tanggal)}</p>
-                    </div>
-                </div>
-            `).join('');
-
-            if (archived.length > 0) {
-                container.innerHTML += `
-                    <div style="grid-column:1/-1;text-align:center;margin-top:20px;">
-                        <select onchange="if(this.value !== '') { openModal('serbaSerbi', this.value); this.value=''; }" style="width:100%; max-width:400px; padding:10px 20px;border-radius:8px;background:#0d7a3a;color:white;border:none;cursor:pointer;font-weight:bold;font-size:14px;">
-                            <option value="">📂 Lihat Arsip Serba-Serbi Lainnya (${archived.length})</option>
-                            ${archived.map(({ item, idx }) => `<option value="${idx}">${item.judul} - ${formatDate(item.tanggal)}</option>`).join('')}
-                        </select>
-                    </div>
-                `;
+            var html = '';
+            for (var i = 0; i < visible.length; i++) {
+                var obj = visible[i];
+                html += '<div class="content-card" onclick="openModal(\'serbaSerbi\', ' + obj.idx + ')">';
+                html += getMediaHTML(obj.item.gambar, obj.item.judul);
+                html += '<div class="content-card-body"><h4>' + obj.item.judul + (obj.item.penting ? '<span class="badge-penting">PENTING</span>' : '') + '</h4><p class="date">' + formatDate(obj.item.tanggal) + '</p></div>';
+                html += '</div>';
             }
+            
+            if (archived.length > 0) {
+                html += '<div style="grid-column:1/-1;text-align:center;margin-top:20px;"><select onchange="if(this.value !== \'\') { openModal(\'serbaSerbi\', this.value); this.value=\'\'; }" style="width:100%; max-width:400px; padding:10px 20px;border-radius:8px;background:#0d7a3a;color:white;border:none;cursor:pointer;font-weight:bold;font-size:14px;"><option value="">📂 Lihat Arsip Serba-Serbi Lainnya (' + archived.length + ')</option>';
+                for (var j = 0; j < archived.length; j++) {
+                    var arc = archived[j];
+                    html += '<option value="' + arc.idx + '">' + arc.item.judul + ' - ' + formatDate(arc.item.tanggal) + '</option>';
+                }
+                html += '</select></div>';
+            }
+            container.innerHTML = html;
         }
         // ==================== HELPER FUNCTIONS ====================
         function formatRupiah(num) {
@@ -2362,17 +2356,16 @@
         }
 
                // ==================== MODAL ====================
-        function openModal(type, index) {
-            const modal = document.getElementById('contentModal');
-            const data = type === 'kisah' ? DATA.kisah[index] : DATA.serbaSerbi[index];
-            
+               function openModal(type, index) {
+            var modal = document.getElementById('contentModal');
+            var data = type === 'kisah' ? DATA.kisian[index] : DATA.serbaSerbi[index]; // Hati-hati disini, pastikan pakai DATA.kisah
+            if (!data) return;
+
             document.getElementById('modalTitle').textContent = data.judul;
             
-            // Detektor Media Pintar untuk Pop-up
-            let mediaDiv = document.getElementById('modalImage');
-            // Kalau tadinya tag <img>, kita ganti jadi <div> biar bisa nampung video
+            var mediaDiv = document.getElementById('modalImage');
             if (mediaDiv.tagName === 'IMG') {
-                const newDiv = document.createElement('div');
+                var newDiv = document.createElement('div');
                 newDiv.id = 'modalImage';
                 newDiv.style.width = '100%';
                 newDiv.style.minHeight = '200px';
@@ -2389,7 +2382,6 @@
             modal.classList.add('show');
             document.body.style.overflow = 'hidden';
         }
-
         function closeModal() {
             document.getElementById('contentModal').classList.remove('show');
             document.body.style.overflow = '';
