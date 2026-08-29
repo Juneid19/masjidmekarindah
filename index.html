@@ -1820,7 +1820,7 @@
     </div>
 
     <script> <!-- INI BUKA SCRIPT BARU -->
-        // ==================== HADITS HARIAN ====================
+               // ==================== HADITS HARIAN ====================
         const kumpulanHadits = [
             "Barangsiapa menempuh jalan untuk menuntut ilmu, maka Allah akan memudahkan baginya jalan menuju surga. (HR. Muslim)",
             "Tidaklah dua orang berkumpul kecuali mereka berdua saling mencintai karena Allah. (HR. Bukhari)",
@@ -1831,14 +1831,15 @@
             "Cukuplah seseorang dikatakan berdusta jika ia menceritakan semua yang ia dengar. (HR. Muslim)"
         ];
 
-        window.onload = function() {
+        // GANTI window.onload PAKAI INI BIAR GAK NIMPA FUNGSI LAIN
+        document.addEventListener("DOMContentLoaded", function() {
             const el = document.getElementById('haditsText');
             if (el) {
                 const hariIni = new Date().getDate();
                 const index = hariIni % kumpulanHadits.length;
                 el.textContent = kumpulanHadits[index];
             }
-        };
+        });
     </script> <!-- INI TUTUP SCRIPT BARU -->
                 
 	
