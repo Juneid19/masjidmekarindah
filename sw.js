@@ -1,56 +1,44 @@
-const CACHE_NAME = 'masjid-mekarindah-v1';
-const OFFLINE_URL = './offline.html';
-
-const STATIC_ASSETS = [
+const CACHE_NAME = 'masjid-mekarindah-v2';
+const FILES_TO_CACHE = [
   './',
   './index.html',
   './manifest.json'
 ];
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(STATIC_ASSETS))
-      .then(() => self.skipWaiting())
+self.addEventListener('install', (e) => {
+  e.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(FILES_TO_CACHE))
   );
+  self.skipWaiting();
 });
 
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    }).then(() => self.clients.claim())
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
+    caches.keys().then((keyList) => Promise.all(
+      keyList.map((key) => key !== CACHE_NAME ? caches.delete(key) : null)
+    ))
   );
+  self.clients.claim();
 });
 
-self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
+self.addEventListener('fetch', (e) => {
+  // Abaikan request selain GET
+  if (e.request.method !== 'GET') return;
+
+  const url = new URL(e.request.url);
   
-  // Abaikan request dari chrome-extension dll
-  if (!event.request.url.startsWith('http')) return;
+  // Hanya proses request dari web kita sendiri (same-origin), abaikan gambar/video dari link luar
+  if (url.origin !== self.location.origin) return;
 
-  event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        const responseClone = response.clone();
+  e.respondWith(
+    caches.match(e.request).then((response) => {
+      return response || fetch(e.request).then((res) => {
+        const resClone = res.clone();
         caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseClone);
+          cache.put(e.request, resClone);
         });
-        return response;
-      })
-      .catch(() => {
-        return caches.match(event.request).then((response) => {
-          if (response) return response;
-          if (event.request.mode === 'navigate') {
-            return caches.match(OFFLINE_URL);
-          }
-        });
-      })
+        return res;
+      }).catch(() => caches.match('./index.html'));
+    })
   );
 });
