@@ -1802,12 +1802,13 @@
                     rekening: '2022-112-212',
                     atasNama: 'Yayasan Islam Mekarindah',
                     mapEmbed: ''
-                }
+}
             };
             renderAll();
         }
+</script> <!-- TAMBAHKAN INI BUAT NUTUP SCRIPT LAMA -->
 
-		    <!-- Running Text Hadits -->
+    <!-- Running Text Hadits -->
     <div class="hadits-ticker">
         <div class="hadits-ticker-label">
             <i class="fas fa-book-quran"></i> One Day One Hadits
@@ -1817,9 +1818,9 @@
         </div>
     </div>
 
-    <script>
-                // ==================== HADITS HARIAN ====================
-                const kumpulanHadits = [
+    <script> <!-- INI BUKA SCRIPT BARU -->
+        // ==================== HADITS HARIAN ====================
+        const kumpulanHadits = [
             "Barangsiapa menempuh jalan untuk menuntut ilmu, maka Allah akan memudahkan baginya jalan menuju surga. (HR. Muslim)",
             "Tidaklah dua orang berkumpul kecuali mereka berdua saling mencintai karena Allah. (HR. Bukhari)",
             "Orang mukmin yang paling sempurna imannya adalah yang paling baik akhlaknya. (HR. Ahmad)",
@@ -1837,7 +1838,8 @@
                 el.textContent = kumpulanHadits[index];
             }
         };
-	</script>
+    </script> <!-- INI TUTUP SCRIPT BARU -->
+                
 	
         // ==================== RENDER FUNCTIONS ====================
         function renderAll() {
