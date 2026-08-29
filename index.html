@@ -1818,10 +1818,13 @@
             "Cukuplah seseorang dikatakan berdusta jika ia menceritakan semua yang ia dengar. (HR. Muslim)"
         ];
 
-        function loadHaditsHarian() {
-            const hariIni = new Date().getDate(); // Ambil tanggal hari ini
-            const index = hariIni % kumpulanHadits.length; // Putar berdasarkan tanggal
-            document.getElementById('haditsText').textContent = kumpulanHadits[index];
+                function loadHaditsHarian() {
+            const el = document.getElementById('haditsText');
+            if (!el) return; // Anti crash: kalau elemen gak ada, diam aja
+            
+            const hariIni = new Date().getDate();
+            const index = hariIni % kumpulanHadits.length;
+            el.textContent = kumpulanHadits[index];
         }
         
         // Panggil fungsi ini saat web dibuka
